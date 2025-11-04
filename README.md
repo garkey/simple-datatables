@@ -30,6 +30,15 @@ pnpm run setup-hooks  # Creates pre-commit hooks
 
 **Note**: Git hooks are created locally and not tracked in the repository, allowing developers flexibility across different operating systems.
 
+### Run build
+
+`pnpm build`
+
+### Run tests
+
+`pnpm test`
+
+
 <hr>
 <hr>
 <h1 style="font-size: 2rem">Original Repository</h1>
