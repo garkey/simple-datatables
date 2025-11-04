@@ -33,6 +33,30 @@ testServer.stdout.on('data', (data) => {
     });
 });
 
+// Start TypeScript checker
+console.log('🔍 Starting TypeScript checker...');
+const tsc = spawn('npx', ['tsc', '--noEmit', '--watch'], {
+    stdio: ['inherit', 'pipe', 'pipe']
+});
+
+tsc.stdout.on('data', (data) => {
+    const output = data.toString();
+    output.split('\n').forEach(line => {
+        if (line.trim()) {
+            console.log(`🔍 [TSC] ${line}`);
+        }
+    });
+});
+
+tsc.stderr.on('data', (data) => {
+    const output = data.toString();
+    output.split('\n').forEach(line => {
+        if (line.trim()) {
+            console.log(`🔍 [TSC] ${line}`);
+        }
+    });
+});
+
 // Start rollup in watch mode
 console.log('🔨 Starting Rollup build watcher...');
 const rollup = spawn('npx', ['rollup', '-c', '--watch'], {
@@ -66,29 +90,6 @@ function checkAndCopyIfChanged() {
 
 // Check for changes every 500ms (only when we think a build happened)
 let checkInterval = null;
-/* 
-rollup.stdout.on('data', (data) => {
-    const output = data.toString();
-    console.log('output: stdout', output);
-    
-    output.split('\n').forEach(line => {
-        if (line.trim()) {
-            console.log(`🔨 [BUILD] ${line}`);
-        }
-    });
-    
-    const cleanOutput = output.replace(/\u001b\[[0-9;]*m/g, '');
-    
-    // When build starts, clear any existing interval
-    if (cleanOutput.includes('bundles') && cleanOutput.includes('src/index.ts')) {
-        if (checkInterval) {
-            clearInterval(checkInterval);
-        }
-    }
-    
-    
-});
- */
 
 rollup.stderr.on('data', (data) => {
   const output = data.toString();
@@ -113,6 +114,7 @@ function cleanup() {
     console.log('\n🛑 Stopping all processes...');
     if (checkInterval) clearInterval(checkInterval);
     testServer.kill('SIGINT');
+    tsc.kill('SIGINT');
     rollup.kill('SIGINT');
     process.exit(0);
 }
@@ -125,6 +127,11 @@ testServer.on('close', (code) => {
     if (code !== 0) cleanup();
 });
 
+tsc.on('close', (code) => {
+    console.log(`🔍 TypeScript checker exited with code ${code}`);
+    if (code !== 0) cleanup();
+});
+
 rollup.on('close', (code) => {
     console.log(`🔨 Rollup process exited with code ${code}`);
     if (code !== 0) cleanup();
@@ -132,6 +139,7 @@ rollup.on('close', (code) => {
 
 console.log('📋 Development environment started!');
 console.log('   🌐 Test server: watching test/server.mjs');
+console.log('   🔍 TypeScript checker: watching src/ files for type errors');
 console.log('   🔨 Build watcher: watching src/ files');
 console.log('   📁 Auto-copy: dist/module.js → docs/demos/dist/module.js');
 console.log('   🛑 Press Ctrl+C to stop all processes');
