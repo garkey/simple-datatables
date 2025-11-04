@@ -25,7 +25,8 @@
     "build_demos": "npm run build_demos_js && shx cp -R src/css docs/demos/dist/",
     "build_demos_js": "rollup -c rollup.demos.config.mjs",
     "postbuild_demos": "shx cp -r dist/umd/simple-datatables.js docs/demos/dist/umd.js",
-    "prepare": "npm run build && husky install"
+    "prepare": "npm run build && husky install",
+    "setup": "husky install && husky add .husky/pre-commit 'pnpm test && pnpm pre-commit'"
   },
   "pre-commit": [
     "pre-commit"
