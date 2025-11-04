@@ -4,20 +4,14 @@
 
 ## Installation
 
-`pnpm i`
-
-## Development
-
-`pnpm dev`
-
 ### Git Hooks Setup
-
-This project uses [Husky](https://typicode.github.io/husky/) for Git hooks to ensure code quality.
 
 **Automatic Setup:**
 ```bash
 pnpm install  # Automatically sets up Husky
 ```
+
+This project uses [Husky](https://typicode.github.io/husky/) for Git hooks to ensure code quality.
 
 **Manual Setup (if needed):**
 ```bash
@@ -30,6 +24,8 @@ pnpm run setup-hooks  # Creates pre-commit hooks
 
 **Note**: Git hooks are created locally and not tracked in the repository, allowing developers flexibility across different operating systems.
 
+## Pre-dev, Building, and Testing
+
 ### Run build
 
 `pnpm build`
@@ -37,6 +33,10 @@ pnpm run setup-hooks  # Creates pre-commit hooks
 ### Run tests
 
 `pnpm test`
+
+## Development
+
+`pnpm dev`
 
 
 <hr>
