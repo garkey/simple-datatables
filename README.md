@@ -1,3 +1,20 @@
+# ksp-table
+
+- use [pnpm](https://pnpm.io/)
+
+## Installation
+
+`pnpm i`
+
+## Development
+
+`pnpm dev`
+
+<hr>
+<hr>
+<h1 style="font-size: 2rem">Original Repository</h1>
+
+
 # simple-datatables
 
 A lightweight, extendable, JavaScript HTML table library written in TypeScript and transpilled to Vanilla JavaScript. Similar to jQuery DataTables **for use in modern browsers**, but without the jQuery dependency.
