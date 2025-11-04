@@ -10,6 +10,26 @@
 
 `pnpm dev`
 
+### Git Hooks Setup
+
+This project uses [Husky](https://typicode.github.io/husky/) for Git hooks to ensure code quality.
+
+**Automatic Setup:**
+```bash
+pnpm install  # Automatically sets up Husky
+```
+
+**Manual Setup (if needed):**
+```bash
+pnpm run setup-hooks  # Creates pre-commit hooks
+```
+
+**What the hooks do:**
+- **Pre-commit**: Runs tests and linting before allowing commits
+- Ensures code passes `pnpm test` and `pnpm run pre-commit` (ESLint with auto-fix)
+
+**Note**: Git hooks are created locally and not tracked in the repository, allowing developers flexibility across different operating systems.
+
 <hr>
 <hr>
 <h1 style="font-size: 2rem">Original Repository</h1>
@@ -132,11 +152,29 @@ const dataTable = new simpleDatatables.DataTable("#myTable", {
 1. Fork the repository
 2. Create a sub-branch
 3. Clone the sub-branch to your local system
-4. Install [NodeJS](https://nodejs.org/en)
+4. Install [NodeJS](https://nodejs.org/en) and [pnpm](https://pnpm.io/)
 5. Open the project in a code editor (for example [Visual Studio Code](https://code.visualstudio.com/) or [Pulsar Edit](https://pulsar-edit.dev/))
 6. Open the Terminal
-7. Run `npm install` in the Terminal
-8. Start making changes and contributing to the project 🙂
-9. You can run `npm run test_server` to test your code. This runs on port 3000 (http://localhost:3000/)
-10. You can also run `npm run build` in the Terminal to build the final files
-11. Once finished, then commit/push your code and create a Pull Request on GitHub for the changes
+7. Run `pnpm install` in the Terminal (this automatically sets up Husky git hooks)
+8. **Optional**: Run `pnpm run setup-hooks` if you want to set up pre-commit hooks manually
+9. Start making changes and contributing to the project 🙂
+
+### Development Commands
+
+- **`pnpm run dev`** - Full development environment (test server + build watcher + TypeScript checker)
+- **`pnpm run test_server`** - Test server only (runs on port 3000: http://localhost:3000/)
+- **`pnpm run typecheck:watch`** - TypeScript checker in watch mode
+- **`pnpm run build_js:watch`** - Build watcher only
+- **`pnpm run build`** - Build final files for production
+
+### Code Quality
+
+The project enforces code quality through:
+- **TypeScript**: Type checking with `pnpm run typecheck`
+- **ESLint**: Linting with `pnpm run lint`
+- **Pre-commit hooks**: Automatic testing and linting before commits
+- **Tests**: Run with `pnpm test`
+
+10. Once finished, commit/push your code and create a Pull Request on GitHub for the changes
+
+**Note**: The pre-commit hook will automatically run tests and fix linting issues before allowing commits.

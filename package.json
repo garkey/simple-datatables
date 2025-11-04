@@ -26,7 +26,7 @@
     "build_demos_js": "rollup -c rollup.demos.config.mjs",
     "postbuild_demos": "shx cp -r dist/umd/simple-datatables.js docs/demos/dist/umd.js",
     "prepare": "husky install",
-    "setup-hooks": "mkdir -p .husky && echo '#!/usr/bin/env sh\n. \"$(dirname -- \"$0\")/_/husky.sh\"\n\npnpm test && pnpm run pre-commit' > .husky/pre-commit && chmod +x .husky/pre-commit"
+    "setup-hooks": "node scripts/setup-hooks.mjs"
   },
   "pre-commit": [
     "pre-commit"
