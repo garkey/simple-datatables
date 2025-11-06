@@ -164,6 +164,8 @@ export class DataTable {
      * Initialize the instance
      */
     init() {
+        console.log('%c here! ', 'background: #f00; color: #fff', );
+
         if (this.initialized || containsClass(this.dom, this.options.classes.table)) {
             return false
         }

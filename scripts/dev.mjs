@@ -18,6 +18,41 @@ function copyModule() {
     }
 }
 
+// Function to build UMD version
+function buildUMD() {
+    console.log('🔧 Building UMD version...');
+    const umdBuild = spawn('pnpm', ['run', 'build_js_umd'], {
+        stdio: ['inherit', 'pipe', 'pipe']
+    });
+
+    umdBuild.stdout.on('data', (data) => {
+        const output = data.toString();
+        output.split('\n').forEach(line => {
+            if (line.trim()) {
+                console.log(`🔧 [UMD] ${line}`);
+            }
+        });
+    });
+
+    umdBuild.stderr.on('data', (data) => {
+        const output = data.toString();
+        output.split('\n').forEach(line => {
+            if (line.trim()) {
+                console.log(`🔧 [UMD] ${line}`);
+            }
+        });
+    });
+
+    umdBuild.on('close', (code) => {
+        if (code === 0) {
+            console.log('✅ UMD build completed successfully');
+            copyFileSync('dist/umd/simple-datatables.js', 'docs/demos/dist/ksp-table.js');
+        } else {
+            console.log(`❌ UMD build failed with code ${code}`);
+        }
+    });
+}
+
 // Start test server
 console.log('🚀 Starting test server...');
 const testServer = spawn('node', ['--watch', 'test/server.mjs'], {
@@ -81,7 +116,9 @@ function checkAndCopyIfChanged() {
                 console.log('🎯 New build detected, copying module.js...');
                 lastModTime = currentModTime;
                 copyModule();
+                return true;
             }
+            return false;
         }
     } catch (error) {
         // File might not exist yet
@@ -99,10 +136,14 @@ rollup.stderr.on('data', (data) => {
     
   console.log('cleanOutput', cleanOutput);
 
-  // When build completes, check for changes a few times
+    // When build completes, check for changes a few times
     if (cleanOutput.includes('created') && cleanOutput.includes('dist/module.js')) {
-        let checks = 0;
-        checkAndCopyIfChanged();
+        const hasChanged = checkAndCopyIfChanged();
+        
+        if (hasChanged) {
+            console.log('🎯 Changes detected, building UMD version...');
+            buildUMD();
+        }
     }
   
 

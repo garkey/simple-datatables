@@ -36,7 +36,20 @@ pnpm run setup-hooks  # Creates pre-commit hooks
 
 ## Development
 
-`pnpm dev`
+`pnpm dev` - runs scripts/dev.mjs
+
+The `scripts/dev.mjs` file is your **development workstation on autopilot**. When you run `pnpm dev`, this script starts up multiple tools that work together to make coding easier and faster.
+
+**What it does:**
+- **Starts a test server** so you can view your project in a browser at http://localhost:3000
+- **Watches your TypeScript code** and tells you immediately if there are any type errors
+- **Automatically builds your project** whenever you save changes to your source files
+- **Copies files** to the right places so demos and examples work properly
+- **Creates different versions** of your library (ES modules and UMD) for different use cases
+
+Think of it like having a helpful assistant that constantly checks your work, builds your project, and keeps everything organized while you focus on writing code.
+
+Use the ES modules for development examples. The UMD module will be copied and consumed by the CAMS/KSP SF instances.
 
 
 <hr>
