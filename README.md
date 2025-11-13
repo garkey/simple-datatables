@@ -40,6 +40,20 @@ pnpm run setup-hooks  # Creates pre-commit hooks
 
 The `scripts/dev.mjs` file is your **development workstation on autopilot**. When you run `pnpm dev`, this script starts up multiple tools that work together to make coding easier and faster.
 
+## Migrating build
+
+Build all artifacts.
+
+`pnpm build`
+
+Then copy the UMD build to the staticresource.
+
+`cp dist/umd/simple-datatables.js productionpl/force-app/main/default/staticresources/ksptable/ksp-table.js`
+
+Deploy build to sandbox
+
+`project deploy start --verbose -o cd1 -c -r -d force-app/main/default/staticresources/ksptable/ksp-table.js`
+
 **What it does:**
 - **Starts a test server** so you can view your project in a browser at http://localhost:3000
 - **Watches your TypeScript code** and tells you immediately if there are any type errors
