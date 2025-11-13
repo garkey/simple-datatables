@@ -145,7 +145,7 @@ export class Columns {
         const newColumnSelector = this.dt.data.headings.length
         this.dt.data.headings = this.dt.data.headings.concat([readHeaderCell(data.heading)])
         this.dt.data.data.forEach((row: dataRowType, index: number) => {
-            row.cells = row.cells.concat([readDataCell(data.data[index], data)])
+            row.cells = row.cells.concat([readDataCell(data.data[index], data, this.dt.options.renderNulls)])
         })
         this.settings[newColumnSelector] = {
             type: data.type || "string",

@@ -188,7 +188,7 @@ export class DataTable {
         this.rows = new Rows(this)
         this.columns = new Columns(this)
 
-        this.data = readTableData(this.options.data, this.dom, this.columns.settings, this.options.type, this.options.format)
+        this.data = readTableData(this.options.data, this.dom, this.columns.settings, this.options.type, this.options.format, this.options.renderNulls)
 
         this._render()
 
@@ -960,9 +960,9 @@ export class DataTable {
                     const index = headings.indexOf(heading)
 
                     if (index > -1) {
-                        r[index] = readDataCell(cell as inputCellType, this.columns.settings[index])
+                        r[index] = readDataCell(cell as inputCellType, this.columns.settings[index], this.options.renderNulls)
                     } else if (!this.hasHeadings && !this.hasRows && rIndex === 0) {
-                        r[headings.length] = readDataCell(cell as inputCellType, this.columns.settings[headings.length])
+                        r[headings.length] = readDataCell(cell as inputCellType, this.columns.settings[headings.length], this.options.renderNulls)
                         headings.push(heading)
                         this.data.headings.push(readHeaderCell(heading))
                     }
@@ -973,7 +973,7 @@ export class DataTable {
             })
         } else if (isObject(data)) {
             if (data.headings && !this.hasHeadings && !this.hasRows) {
-                this.data = readTableData(data, undefined, this.columns.settings, this.options.type, this.options.format)
+                this.data = readTableData(data, undefined, this.columns.settings, this.options.type, this.options.format, this.options.renderNulls)
             } else if (data.data && Array.isArray(data.data)) {
                 rows = data.data.map(row => {
                     let attributes: { [key: string]: string }
@@ -987,7 +987,7 @@ export class DataTable {
                     }
                     return {
                         attributes,
-                        cells: cells.map((cell, index) => readDataCell(cell as inputCellType, this.columns.settings[index]))
+                        cells: cells.map((cell, index) => readDataCell(cell as inputCellType, this.columns.settings[index], this.options.renderNulls))
                     } as dataRowType
                 })
             }

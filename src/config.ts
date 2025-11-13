@@ -59,6 +59,7 @@ export const defaultConfig: DataTableConfiguration = {
     pagerRender: false,
     rowRender: false,
     tableRender: false,
+    renderNulls: false,
     diffDomOptions: {
         valueDiffing: false,
         simplifiedElementCheck: false

@@ -442,6 +442,7 @@ interface DataTableConfiguration {
      * Default: true
      * Truncate the page links to prevent overflow with large datasets.
      */
+    renderNulls?: boolean;
 }
 
 interface DataTableOptions extends DeepPartial<DataTableConfiguration> {
@@ -450,6 +451,7 @@ interface DataTableOptions extends DeepPartial<DataTableConfiguration> {
     perPageSelect?: (number | [string, number])[] | false;
     rowRender?: false | rowRenderType;
     tableRender?: false | tableRenderType;
+    renderNulls?: boolean;
 }
 
 

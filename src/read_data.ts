@@ -14,7 +14,7 @@ import {
     nodeType
 } from "./types"
 
-export const readDataCell = (cell: inputCellType, columnSettings : columnSettingsType) : cellType => {
+export const readDataCell = (cell: inputCellType, columnSettings : columnSettingsType, renderNulls: boolean = false) : cellType => {
     let cellData : cellType
     let inputData: cellDataType
     let attributes: { [key: string]: string } | undefined
@@ -41,7 +41,7 @@ export const readDataCell = (cell: inputCellType, columnSettings : columnSetting
         }
     }
 
-    if (cell === null || cell === undefined) {
+    if (renderNulls === false && (cell === null || cell === undefined)) {
         cellData.text = ""
         cellData.data = cell
         cellData.order = ["string", "date", "html"].includes(columnSettings.type) ? "" : 0
@@ -216,8 +216,7 @@ export const readDOMHeaderCell = (cell: HTMLElement) : headerCellType => {
 
 }
 
-export const readTableData = (dataOption: DataOption, dom: (HTMLTableElement | undefined)=undefined, columnSettings, defaultType, defaultFormat) => {
-
+export const readTableData = (dataOption: DataOption, dom: (HTMLTableElement | undefined)=undefined, columnSettings, defaultType, defaultFormat, renderNulls: boolean = false) => {
     const data = {
         data: [] as dataRowType[],
         headings: [] as headerCellType[]
@@ -377,7 +376,7 @@ export const readTableData = (dataOption: DataOption, dom: (HTMLTableElement | u
                 } else if (inputCellIndex < cells.length) {
                     // Process the next input cell
                     const cell = cells[inputCellIndex]
-                    const cellData = readDataCell(cell, columnSettings[cellIndex])
+                    const cellData = readDataCell(cell, columnSettings[cellIndex], renderNulls)
                     const colspan = parseInt(cellData.attributes?.colspan || "1", 10)
                     const rowspan = parseInt(cellData.attributes?.rowspan || "1", 10)
 
@@ -457,7 +456,7 @@ export const readTableData = (dataOption: DataOption, dom: (HTMLTableElement | u
 
                         // Add the actual cell with colspan and rowspan data
                         const cellData = cell.dataset.content ?
-                            readDataCell(cell.dataset.content, columnSettings[cellIndex]) :
+                            readDataCell(cell.dataset.content, columnSettings[cellIndex], renderNulls) :
                             readDOMDataCell(cell, columnSettings[cellIndex])
                         if (cell.dataset.order) {
                             cellData.order = isNaN(parseFloat(cell.dataset.order)) ? cell.dataset.order : parseFloat(cell.dataset.order)

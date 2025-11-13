@@ -13,7 +13,6 @@ export class Rows {
 
     constructor(dt: DataTable) {
         this.dt = dt
-
         this.cursor = false
     }
 
@@ -45,7 +44,7 @@ export class Rows {
         const row: dataRowType = {
             cells: data.map((cell: cellType, index: number) => {
                 const columnSettings = this.dt.columns.settings[index]
-                return readDataCell(cell, columnSettings)
+                return readDataCell(cell, columnSettings, this.dt.options.renderNulls)
             })
         }
         this.dt.data.data.push(row)
@@ -118,7 +117,7 @@ export class Rows {
         const row: dataRowType = {
             cells: data.map((cell: inputCellType, index: number) => {
                 const columnSettings = this.dt.columns.settings[index]
-                return readDataCell(cell, columnSettings)
+                return readDataCell(cell, columnSettings, this.dt.options.renderNulls)
             })
         }
         this.dt.data.data.splice(select, 1, row)
