@@ -44,7 +44,7 @@ export const readDataCell = (cell: inputCellType, columnSettings : columnSetting
     if (cell === null || cell === undefined) {
         cellData.text = ""
         cellData.data = cell
-        cellData.order = ['string', 'date', 'html'].includes(columnSettings.type) ? '' : 0
+        cellData.order = ["string", "date", "html"].includes(columnSettings.type) ? "" : 0
         // Only process if text/order are not already set
     } else if (cellData.text === undefined || cellData.order === undefined) {
         switch (columnSettings.type) {
