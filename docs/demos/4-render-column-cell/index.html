@@ -55,8 +55,8 @@
             const data = {
                 headings: ["ID", "Drink", "Price", "Caffeinated", "Profit"],
                 data: [
-                    [574, "Latte", 4.00, false, 0.00],
-                    [984, "Herbal tea", 3.00, false, 0.56],
+                    [574, "Latte", 4.00, null, 0.00],
+                    [984, "Herbal tea", null, false, 0.56],
                     [312, "Green tea", 3.00, true, 1.72],
                     [312, "Latte", 3.00, true, -1.21],
                     [312, "Green tea", 3.00, false, 0.00],
@@ -105,11 +105,10 @@
                             data: "Buy Now!"
                         }
                     ]
-                })
-            }
+                })   
+}
             // Caffeinated column cell manipulation
-            const renderYesNo = function(data, cell, _dataIndex, _cellIndex) {
-
+            const renderYesNo = function(data, cell, _dataIndex, _cellIndex) {                
                 if ([true, false].includes(data)) {
                     cell.childNodes = [
                         {

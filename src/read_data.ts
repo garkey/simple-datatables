@@ -40,8 +40,13 @@ export const readDataCell = (cell: inputCellType, columnSettings : columnSetting
             data: cell
         }
     }
-    // Only process if text/order are not already set
-    if (cellData.text === undefined || cellData.order === undefined) {
+
+    if (cell === null || cell === undefined) {
+        cellData.text = ""
+        cellData.data = cell
+        cellData.order = 0
+        // Only process if text/order are not already set
+    } else if (cellData.text === undefined || cellData.order === undefined) {
         switch (columnSettings.type) {
         case "string":
             if (!(typeof inputData === "string")) {
