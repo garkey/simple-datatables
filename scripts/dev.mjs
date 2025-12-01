@@ -12,6 +12,7 @@ if (!existsSync(targetDir)) {
 function copyModule() {
     try {
         copyFileSync('dist/module.js', 'docs/demos/dist/module.js');
+        copyFileSync('dist/umd/simple-datatables.js', 'docs/demos/dist/umd.js');
         console.log('✅ Copied dist/module.js to docs/demos/dist/module.js');
     } catch (error) {
         console.error('❌ Failed to copy module.js:', error.message);
