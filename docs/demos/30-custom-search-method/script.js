@@ -14,9 +14,7 @@ const datatable = new DataTable("#demo-table", {
                     )
                 } else {
                     // This is normal search. We just check if one of the terms is part of the text of the cell
-                    found = terms.find(
-                        term => cell.text.toLowerCase().includes(term.toLowerCase().trim())
-                    )
+                    found = terms.find(term => cell.text.toLowerCase().includes(term.toLowerCase().trim()))
                 }
                 if (found) return true
                 return false
@@ -32,9 +30,7 @@ const datatable = new DataTable("#demo-table", {
                     return false
                 }
                 // This is normal search. We just check if one of the terms is part of the text of the cell
-                const found = terms.find(
-                    term => cell.data.includes(term.toLowerCase().trim())
-                )
+                const found = terms.find(term => cell.data.includes(term.toLowerCase().trim()))
 
                 if (found) return true
                 return false
@@ -42,7 +38,6 @@ const datatable = new DataTable("#demo-table", {
         }
     ]
 })
-
 
 // Multi-select dropdown
 let isDropdownOpen = false
@@ -60,8 +55,12 @@ const toggleDropdown = () => {
 
 document.querySelector(".select-box").addEventListener("click", toggleDropdown)
 // Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-    if (!event.target.matches(".select-box") && !event.target.matches(".over-select") && !event.target.closest("#checkboxes")) {
+window.onclick = function (event) {
+    if (
+        !event.target.matches(".select-box") &&
+        !event.target.matches(".over-select") &&
+        !event.target.closest("#checkboxes")
+    ) {
         const checkboxes = document.getElementById("checkboxes")
         checkboxes.style.display = "none"
         isDropdownOpen = false
@@ -69,31 +68,25 @@ window.onclick = function(event) {
     if (event.target.closest("#checkboxes label")) {
         // Change in checked classes, restart search
         // Get all checked checkboxes
-        const checked = Array.from(document.querySelectorAll("#checkboxes input:checked")).map(checkbox => checkbox.value)
+        const checked = Array.from(document.querySelectorAll("#checkboxes input:checked")).map(
+            checkbox => checkbox.value
+        )
         if (!checked.length) {
             // Don't allow deselecting the last checkbox.
             event.target.closest("#checkboxes label").querySelector("input").checked = true
             return
         }
-        datatable.multiSearch([
-            {terms: checked,
-                columns: [1]}
-        ], "class-filter")
+        datatable.multiSearch([{terms: checked, columns: [1]}], "class-filter")
     }
-
 }
 
 const updateSliderValue = value => {
     document.getElementById("slider-value").innerHTML = `${value}%`
-    datatable.multiSearch([
-        {terms: [value],
-            columns: [4]}
-    ], "completion-filter")
+    datatable.multiSearch([{terms: [value], columns: [4]}], "completion-filter")
 }
 
-document.querySelector("#percentage-slider").addEventListener("input", function() {
+document.querySelector("#percentage-slider").addEventListener("input", function () {
     updateSliderValue(this.value)
 })
-
 
 window.dt = datatable

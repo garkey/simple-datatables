@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
         <title>Custom cell renderer - simple-datatables</title>
         <!-- DataTable Styles -->
-        <link rel="stylesheet" href="../dist/css/style.css">
+        <link rel="stylesheet" href="../dist/css/style.css" />
         <!-- Demo Styles -->
-        <link rel="stylesheet" href="../demo.css">
+        <link rel="stylesheet" href="../demo.css" />
         <!-- Custom Styles -->
         <style>
             .buy-now {
@@ -22,9 +22,10 @@
                 color: red;
             }
 
-            .currency {}
+            .currency {
+            }
             .currency:before {
-                content: "$ "
+                content: "$ ";
             }
             .currency--profit {
                 color: limegreen;
@@ -55,35 +56,35 @@
             const data = {
                 headings: ["ID", "Drink", "Price", "Caffeinated", "Profit"],
                 data: [
-                    [574, "Latte", 4.00, null, 0.00],
+                    [574, "Latte", 4.0, null, 0.0],
                     [984, "Herbal tea", null, false, 0.56],
-                    [312, "Green tea", 3.00, true, 1.72],
-                    [312, "Latte", 3.00, true, -1.21],
-                    [312, "Green tea", 3.00, false, 0.00],
-                    [312, "Green tea", 3.00, false, 0.00],
-                    [312, "Green tea", 3.00, true, 1.72],
-                    [312, "Latte", 3.00, true, 1.72],
-                    [312, "Green tea", 3.00, true, -1.21],
-                    [312, "Green tea", 3.00, false, 0.00],
-                    [312, "Green tea", 3.00, true, 1.72],
-                    [312, "Green tea", 3.00, true, 1.72],
-                    [312, "Latte", 3.00, false, 0.00],
-                    [312, "Latte", 3.00, true, 1.72],
-                    [312, "Green tea", 3.00, false, 0.00],
-                    [312, "Green tea", 3.00, true, 1.72],
-                    [312, "Latte", 3.00, false, 0.00],
-                    [312, "Latte", 3.00, true, -1.21],
-                    [312, "Latte", 3.00, true, 1.72],
-                    [312, "Latte", 3.00, false, 0.00],
-                    [312, "Latte", 3.00, false, 0.00],
-                    [312, "Latte", 3.00, true, 1.72],
-                    [312, "Green tea", 3.00, true, -1.21],
-                    [312, "Green tea", 3.00, true, -1.21],
-                    [312, "Green tea", 3.00, true, -1.21]
+                    [312, "Green tea", 3.0, true, 1.72],
+                    [312, "Latte", 3.0, true, -1.21],
+                    [312, "Green tea", 3.0, false, 0.0],
+                    [312, "Green tea", 3.0, false, 0.0],
+                    [312, "Green tea", 3.0, true, 1.72],
+                    [312, "Latte", 3.0, true, 1.72],
+                    [312, "Green tea", 3.0, true, -1.21],
+                    [312, "Green tea", 3.0, false, 0.0],
+                    [312, "Green tea", 3.0, true, 1.72],
+                    [312, "Green tea", 3.0, true, 1.72],
+                    [312, "Latte", 3.0, false, 0.0],
+                    [312, "Latte", 3.0, true, 1.72],
+                    [312, "Green tea", 3.0, false, 0.0],
+                    [312, "Green tea", 3.0, true, 1.72],
+                    [312, "Latte", 3.0, false, 0.0],
+                    [312, "Latte", 3.0, true, -1.21],
+                    [312, "Latte", 3.0, true, 1.72],
+                    [312, "Latte", 3.0, false, 0.0],
+                    [312, "Latte", 3.0, false, 0.0],
+                    [312, "Latte", 3.0, true, 1.72],
+                    [312, "Green tea", 3.0, true, -1.21],
+                    [312, "Green tea", 3.0, true, -1.21],
+                    [312, "Green tea", 3.0, true, -1.21]
                 ]
             }
             // Add Icon
-            const renderIcon = function(data, _cell, _dataIndex, _cellIndex) {
+            const renderIcon = function (data, _cell, _dataIndex, _cellIndex) {
                 if (data === "Latte") {
                     return `☕ ${data}`
                 } else if (data === "Green tea") {
@@ -92,7 +93,7 @@
                 return `🌿 ${data}`
             }
             // Price column cell manipulation
-            const renderButton = function(data, cell, dataIndex, _cellIndex) {
+            const renderButton = function (data, cell, dataIndex, _cellIndex) {
                 cell.childNodes.push({
                     nodeName: "BUTTON",
                     attributes: {
@@ -105,10 +106,10 @@
                             data: "Buy Now!"
                         }
                     ]
-                })   
-}
+                })
+            }
             // Caffeinated column cell manipulation
-            const renderYesNo = function(data, cell, _dataIndex, _cellIndex) {                
+            const renderYesNo = function (data, cell, _dataIndex, _cellIndex) {
                 if ([true, false].includes(data)) {
                     cell.childNodes = [
                         {
@@ -128,7 +129,7 @@
             }
 
             // numbers
-            const renderHighLow = function(data, cell, _dataIndex, _cellIndex) {
+            const renderHighLow = function (data, cell, _dataIndex, _cellIndex) {
                 const cellTextNode = cell.childNodes[0]
                 const currencyNode = {
                     nodeName: "SPAN",
@@ -159,7 +160,6 @@
                         } else {
                             tr.attributes.class += row.cells[3].data === true ? "yes" : "no"
                         }
-
                     }
                 },
                 columns: [
@@ -167,19 +167,23 @@
                         select: 0,
                         hidden: true,
                         type: "number"
-                    }, {
+                    },
+                    {
                         select: 1,
                         render: renderIcon,
                         type: "string"
-                    }, {
+                    },
+                    {
                         select: 2,
                         render: renderButton,
                         type: "number"
-                    }, {
+                    },
+                    {
                         select: 3,
                         render: renderYesNo,
                         type: "boolean"
-                    }, {
+                    },
+                    {
                         select: 4,
                         render: renderHighLow,
                         type: "number"

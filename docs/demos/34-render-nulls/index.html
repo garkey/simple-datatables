@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
         <title>Custom cell renderer - simple-datatables</title>
         <!-- DataTable Styles -->
-        <link rel="stylesheet" href="../dist/css/style.css">
+        <link rel="stylesheet" href="../dist/css/style.css" />
         <!-- Demo Styles -->
-        <link rel="stylesheet" href="../demo.css">
+        <link rel="stylesheet" href="../demo.css" />
         <!-- Custom Styles -->
         <style>
             .buy-now {
@@ -22,9 +22,10 @@
                 color: red;
             }
 
-            .currency {}
+            .currency {
+            }
             .currency:before {
-                content: "$ "
+                content: "$ ";
             }
             .currency--profit {
                 color: limegreen;
@@ -56,9 +57,9 @@
                 // headings: ["ID", "Drink", "Price", "Caffeinated", "Profit"],
                 headings: ["ID", "Drink", "Price", "Caffeinated"],
                 data: [
-                    [574, "Latte", 4.00, null],
+                    [574, "Latte", 4.0, null],
                     [984, "Herbal tea", null, false],
-                    [984, null, 5, false],
+                    [984, null, 5, false]
                     // [574, "Latte", 4.00, null, 0.00],
                     // [984, "Herbal tea", null, false, 0.56],
                     // [312, "Green tea", 3.00, true, 1.72],
@@ -86,21 +87,10 @@
                     // [312, "Green tea", 3.00, true, -1.21]
                 ]
             }
-            // Add Icon
-            const renderIcon = function(data, _cell, _dataIndex, _cellIndex) {
-                if (data === "Latte") {
-                    return `☕ ${data}`
-                } else if (data === "Green tea") {
-                    return `🍵 ${data}`
-                }
-                return `🌿 ${data}`
-            }
             // Price column cell manipulation
-            const renderButton = function(data, cell, dataIndex, _cellIndex) {
-
-                console.log('data', JSON.stringify(data, null, 2))
-                console.log('cell', JSON.stringify(cell, null, 2))
-                
+            const renderButton = function (data, cell, _dataIndex, _cellIndex) {
+                console.log("data", JSON.stringify(data, null, 2))
+                console.log("cell", JSON.stringify(cell, null, 2))
 
                 // cell.childNodes.push({
                 //     nodeName: "BUTTON",
@@ -114,10 +104,10 @@
                 //             data: "Buy Now!"
                 //         }
                 //     ]
-                // })   
-    }
+                // })
+            }
             // Caffeinated column cell manipulation
-            const renderYesNo = function(data, cell, _dataIndex, _cellIndex) {                
+            const renderYesNo = function (data, cell, _dataIndex, _cellIndex) {
                 if ([true, false].includes(data)) {
                     cell.childNodes = [
                         {
@@ -136,29 +126,9 @@
                 }
             }
 
-            // numbers
-            const renderHighLow = function(data, cell, _dataIndex, _cellIndex) {
-                const cellTextNode = cell.childNodes[0]
-                const currencyNode = {
-                    nodeName: "SPAN",
-                    attributes: {
-                        class: "currency "
-                    },
-                    childNodes: [cellTextNode]
-                }
-                cell.childNodes = [currencyNode]
-
-                if (data < 0) {
-                    currencyNode.attributes.class += "currency--loss"
-                } else if (data > 0) {
-                    currencyNode.attributes.class += "currency--profit"
-                } else if (data === 0) {
-                    currencyNode.attributes.class += "currency--zero"
-                }
-            }
-            new window.simpleDatatables.DataTable("#drinks", {
+            const config1 = {
                 data,
-                // renderNulls: true,
+                renderNulls: true,
                 rowRender: (row, tr, _index) => {
                     if ([true, false].includes(row.cells[3].data)) {
                         if (!tr.attributes) {
@@ -169,7 +139,6 @@
                         } else {
                             tr.attributes.class += row.cells[3].data === true ? "yes" : "no"
                         }
-
                     }
                 },
                 columns: [
@@ -177,16 +146,18 @@
                         select: 0,
                         hidden: true,
                         type: "number"
-                    }, 
+                    },
                     {
                         select: 1,
                         // render: renderIcon,
                         type: "string"
-                    }, {
+                    },
+                    {
                         select: 2,
                         render: renderButton,
                         type: "number"
-                    }, {
+                    },
+                    {
                         select: 3,
                         render: renderYesNo,
                         type: "boolean"
@@ -197,7 +168,11 @@
                     //     type: "number"
                     // }
                 ]
-            })
+            }
+
+            console.log("config1", config1)
+
+            new window.simpleDatatables.DataTable("#drinks", config1)
         </script>
     </body>
 </html>

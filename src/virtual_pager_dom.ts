@@ -3,7 +3,12 @@ import {DataTableConfiguration, elementNodeType} from "./types"
 /**
  * Pager truncation algorithm
  */
-const truncate = (paginationListItems: elementNodeType[], currentPage: number, pagesLength: number, options: DataTableConfiguration) : elementNodeType[] => {
+const truncate = (
+    paginationListItems: elementNodeType[],
+    currentPage: number,
+    pagesLength: number,
+    options: DataTableConfiguration
+): elementNodeType[] => {
     const pagerDelta = options.pagerDelta
     const classes = options.classes
     const ellipsisText = options.ellipsisText
@@ -29,7 +34,10 @@ const truncate = (paginationListItems: elementNodeType[], currentPage: number, p
     paginationListItemsToModify.forEach(li => {
         const pageNumber = parseInt((li.childNodes[0] as elementNodeType).attributes["data-page"], 10)
         if (previousLi) {
-            const previousPageNumber = parseInt((previousLi.childNodes[0] as elementNodeType).attributes["data-page"], 10)
+            const previousPageNumber = parseInt(
+                (previousLi.childNodes[0] as elementNodeType).attributes["data-page"],
+                10
+            )
             if (pageNumber - previousPageNumber == 2) {
                 modifiedLis.push(paginationListItems[previousPageNumber])
             } else if (pageNumber - previousPageNumber != 1) {
@@ -63,16 +71,20 @@ const truncate = (paginationListItems: elementNodeType[], currentPage: number, p
     return modifiedLis
 }
 
-
-const paginationListItem = (page: number, label: string, options: DataTableConfiguration, state: {active?: boolean, hidden?: boolean} = {}) : elementNodeType => ({
+const paginationListItem = (
+    page: number,
+    label: string,
+    options: DataTableConfiguration,
+    state: {active?: boolean; hidden?: boolean} = {}
+): elementNodeType => ({
     nodeName: "LI",
     attributes: {
         class:
-        (state.active && !state.hidden) ?
-            `${options.classes.paginationListItem} ${options.classes.active}` :
-            state.hidden ?
-                `${options.classes.paginationListItem} ${options.classes.hidden} ${options.classes.disabled}` :
-                options.classes.paginationListItem
+            state.active && !state.hidden
+                ? `${options.classes.paginationListItem} ${options.classes.active}`
+                : state.hidden
+                  ? `${options.classes.paginationListItem} ${options.classes.hidden} ${options.classes.disabled}`
+                  : options.classes.paginationListItem
     },
     childNodes: [
         {
@@ -92,9 +104,14 @@ const paginationListItem = (page: number, label: string, options: DataTableConfi
     ]
 })
 
-export const createVirtualPagerDOM = (onFirstPage: boolean, onLastPage: boolean, currentPage: number, totalPages: number, options) => {
-
-    let pagerListItems : elementNodeType[] = []
+export const createVirtualPagerDOM = (
+    onFirstPage: boolean,
+    onLastPage: boolean,
+    currentPage: number,
+    totalPages: number,
+    options
+) => {
+    let pagerListItems: elementNodeType[] = []
 
     // first button
     if (options.firstLast) {
@@ -107,17 +124,13 @@ export const createVirtualPagerDOM = (onFirstPage: boolean, onLastPage: boolean,
         pagerListItems.push(paginationListItem(prev, options.prevText, options, {hidden: onFirstPage}))
     }
 
-    let pages = [...Array(totalPages).keys()].map(index => paginationListItem(index+1, String(index+1), options, {active: (index === (currentPage-1))}))
+    let pages = [...Array(totalPages).keys()].map(index =>
+        paginationListItem(index + 1, String(index + 1), options, {active: index === currentPage - 1})
+    )
 
     if (options.truncatePager) {
         // truncate the paginationListItems
-        pages = truncate(
-            pages,
-            currentPage,
-            totalPages,
-            options
-        )
-
+        pages = truncate(pages, currentPage, totalPages, options)
     }
 
     // append the paginationListItems
@@ -134,7 +147,7 @@ export const createVirtualPagerDOM = (onFirstPage: boolean, onLastPage: boolean,
         pagerListItems.push(paginationListItem(totalPages, options.lastText, options))
     }
 
-    const pager : elementNodeType = {
+    const pager: elementNodeType = {
         nodeName: "UL",
         attributes: {
             class: options.classes.paginationList
@@ -143,5 +156,4 @@ export const createVirtualPagerDOM = (onFirstPage: boolean, onLastPage: boolean,
     }
 
     return pager
-
 }

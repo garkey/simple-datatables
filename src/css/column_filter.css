@@ -1,5 +1,5 @@
 .datatable-column-filter-button {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 button.datatable-column-filter-button {
@@ -25,6 +25,7 @@ button.datatable-column-filter-button {
     list-style: none;
 }
 
-.datatable-column-filter-menu > li, .datatable-column-filter-menu > li > label {
+.datatable-column-filter-menu > li,
+.datatable-column-filter-menu > li > label {
     cursor: pointer;
 }

@@ -1,19 +1,17 @@
-import {
-    columnsStateType,
-    filterStateType,
-    columnSettingsType
-} from "./types"
+import {columnsStateType, filterStateType, columnSettingsType} from "./types"
 
-export const readColumnSettings = (columnOptions = [], defaultType, defaultFormat) : [columnSettingsType[], columnsStateType] => {
-
+export const readColumnSettings = (
+    columnOptions = [],
+    defaultType,
+    defaultFormat
+): [columnSettingsType[], columnsStateType] => {
     let columns: (columnSettingsType | undefined)[] = []
-    let sort: (false | {column: number, dir: "asc" | "desc"}) = false
-    const filters: (filterStateType | undefined )[] = []
+    let sort: false | {column: number; dir: "asc" | "desc"} = false
+    const filters: (filterStateType | undefined)[] = []
 
     // Check for the columns option
 
     columnOptions.forEach(data => {
-
         // convert single column selection to array
         const columnSelectors = Array.isArray(data.select) ? data.select : [data.select]
 
@@ -30,7 +28,6 @@ export const readColumnSettings = (columnOptions = [], defaultType, defaultForma
                 }
             }
             const column = columns[selector]
-
 
             if (data.render) {
                 column.render = data.render
@@ -100,33 +97,28 @@ export const readColumnSettings = (columnOptions = [], defaultType, defaultForma
                     filters[selector] = data.sort
                 } else {
                     // We only allow one. The last one will overwrite all other options
-                    sort = {column: selector,
-                        dir: data.sort}
+                    sort = {column: selector, dir: data.sort}
                 }
             }
 
             if (typeof data.searchItemSeparator !== "undefined") {
                 column.searchItemSeparator = data.searchItemSeparator
             }
-
         })
-
-
     })
 
-    columns = columns.map(column => column ?
-        column :
-        {type: defaultType,
-            format: defaultType === "date" ? defaultFormat : undefined,
-            sortable: true,
-            searchable: true})
+    columns = columns.map(column =>
+        column
+            ? column
+            : {
+                  type: defaultType,
+                  format: defaultType === "date" ? defaultFormat : undefined,
+                  sortable: true,
+                  searchable: true
+              }
+    )
 
     const widths = [] // Width are determined later on by measuring on screen.
 
-    return [
-        columns, {filters,
-            sort,
-            widths}
-    ]
-
+    return [columns, {filters, sort, widths}]
 }

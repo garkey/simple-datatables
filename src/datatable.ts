@@ -31,9 +31,7 @@ import {Columns} from "./columns"
 import {defaultConfig} from "./config"
 import {createVirtualPagerDOM} from "./virtual_pager_dom"
 
-
 export class DataTable {
-
     columns: Columns
 
     containerDOM: HTMLDivElement
@@ -46,7 +44,7 @@ export class DataTable {
 
     dom: HTMLTableElement
 
-    _events: { [key: string]: ((...args) => void)[]}
+    _events: {[key: string]: ((...args) => void)[]}
 
     hasHeadings: boolean
 
@@ -62,7 +60,7 @@ export class DataTable {
 
     lastPage: number
 
-    _listeners: { [key: string]: () => void}
+    _listeners: {[key: string]: () => void}
 
     onFirstPage: boolean
 
@@ -76,13 +74,13 @@ export class DataTable {
 
     pages: rowType[][]
 
-    _rect: {width: number, height: number}
+    _rect: {width: number; height: number}
 
     rows: Rows
 
     _searchData: number[]
 
-    _searchQueries: {source: string, terms: string[], columns: (number[] | undefined)}[]
+    _searchQueries: {source: string; terms: string[]; columns: number[] | undefined}[]
 
     _tableAttributes: {[key: string]: string}
 
@@ -99,10 +97,7 @@ export class DataTable {
     wrapperDOM: HTMLElement
 
     constructor(table: HTMLTableElement | string, options: DataTableOptions = {}) {
-
-        const dom = typeof table === "string" ?
-            document.querySelector(table) :
-            table
+        const dom = typeof table === "string" ? document.querySelector(table) : table
         if (dom instanceof HTMLTableElement) {
             this.dom = dom
         } else {
@@ -188,7 +183,14 @@ export class DataTable {
         this.rows = new Rows(this)
         this.columns = new Columns(this)
 
-        this.data = readTableData(this.options.data, this.dom, this.columns.settings, this.options.type, this.options.format, this.options.renderNulls)
+        this.data = readTableData(
+            this.options.data,
+            this.dom,
+            this.columns.settings,
+            this.options.type,
+            this.options.format,
+            this.options.renderNulls
+        )
 
         this._render()
 
@@ -198,12 +200,10 @@ export class DataTable {
         }, 10)
     }
 
-
     /**
      * Render the instance
      */
     _render() {
-
         // Build
         this.wrapperDOM = createElement("div", {
             class: `${this.options.classes.wrapper} ${this.options.classes.loading}`
@@ -216,7 +216,6 @@ export class DataTable {
 
         // Per Page Select
         if (selector && this.options.paging && this.options.perPageSelect) {
-
             // Create the options
             this.options.perPageSelect.forEach((choice: number | [string, number]) => {
                 const [lab, val] = Array.isArray(choice) ? [choice[0], choice[1]] : [String(choice), choice]
@@ -224,7 +223,6 @@ export class DataTable {
                 const option = new Option(lab, String(val), selected, selected)
                 selector.appendChild(option)
             })
-
         } else if (selector) {
             selector.parentElement.removeChild(selector)
         }
@@ -249,7 +247,6 @@ export class DataTable {
                 class: this.options.classes.paginationList
             }
         }
-
 
         const infoSelector = classNamesToSelector(this.options.classes.info)
         this._label = this.wrapperDOM.querySelector(infoSelector)
@@ -300,7 +297,11 @@ export class DataTable {
 
     _renderTable(renderOptions: renderOptions = {}) {
         let rows: rowType[]
-        const isPaged = (this.options.paging || this._searchQueries.length || this.columns._state.filters.length) && this._currentPage && this.pages.length && !renderOptions.noPaging
+        const isPaged =
+            (this.options.paging || this._searchQueries.length || this.columns._state.filters.length) &&
+            this._currentPage &&
+            this.pages.length &&
+            !renderOptions.noPaging
         if (isPaged) {
             rows = this.pages[this._currentPage - 1]
         } else {
@@ -324,7 +325,11 @@ export class DataTable {
         )
 
         if (this.options.tableRender) {
-            const renderedTableVirtualDOM : (elementNodeType | void) = this.options.tableRender(this.data, newVirtualDOM, "main")
+            const renderedTableVirtualDOM: elementNodeType | void = this.options.tableRender(
+                this.data,
+                newVirtualDOM,
+                "main"
+            )
             if (renderedTableVirtualDOM) {
                 newVirtualDOM = renderedTableVirtualDOM
             }
@@ -338,7 +343,7 @@ export class DataTable {
      * Render the page
      * @return {Void}
      */
-    _renderPage(lastRowCursor=false) {
+    _renderPage(lastRowCursor = false) {
         if (this.hasRows && this.totalPages) {
             if (this._currentPage > this.totalPages) {
                 this._currentPage = 1
@@ -385,13 +390,11 @@ export class DataTable {
         }
 
         if (this.options.rowNavigation && this._currentPage) {
-            if (!this.rows.cursor || !this.pages[this._currentPage-1].find(
-                row => row.index === this.rows.cursor)
-            ) {
-                const rows = this.pages[this._currentPage-1]
+            if (!this.rows.cursor || !this.pages[this._currentPage - 1].find(row => row.index === this.rows.cursor)) {
+                const rows = this.pages[this._currentPage - 1]
                 if (rows.length) {
                     if (lastRowCursor) {
-                        this.rows.setCursor(rows[rows.length-1].index)
+                        this.rows.setCursor(rows[rows.length - 1].index)
                     } else {
                         this.rows.setCursor(rows[0].index)
                     }
@@ -407,10 +410,19 @@ export class DataTable {
         if (!this.options.paging) {
             return
         }
-        let newPagerVirtualDOM = createVirtualPagerDOM(this.onFirstPage, this.onLastPage, this._currentPage, this.totalPages, this.options)
+        let newPagerVirtualDOM = createVirtualPagerDOM(
+            this.onFirstPage,
+            this.onLastPage,
+            this._currentPage,
+            this.totalPages,
+            this.options
+        )
 
         if (this.options.pagerRender) {
-            const renderedPagerVirtualDOM : (elementNodeType | void) = this.options.pagerRender([this.onFirstPage, this.onLastPage, this._currentPage, this.totalPages], newPagerVirtualDOM)
+            const renderedPagerVirtualDOM: elementNodeType | void = this.options.pagerRender(
+                [this.onFirstPage, this.onLastPage, this._currentPage, this.totalPages],
+                newPagerVirtualDOM
+            )
             if (renderedPagerVirtualDOM) {
                 newPagerVirtualDOM = renderedPagerVirtualDOM
             }
@@ -434,10 +446,9 @@ export class DataTable {
             this._virtualHeaderDOM = {
                 nodeName: "DIV"
             }
-
         }
         container.parentElement.insertBefore(this.headerDOM, container)
-        let tableVirtualDOM : elementNodeType = {
+        let tableVirtualDOM: elementNodeType = {
             nodeName: "TABLE",
             attributes: this._tableAttributes,
             childNodes: [
@@ -445,18 +456,28 @@ export class DataTable {
                     nodeName: "THEAD",
                     childNodes: [
                         headingsToVirtualHeaderRowDOM(
-                            this.data.headings, this.columns.settings, this.columns._state, this.options, {unhideHeader: true})
+                            this.data.headings,
+                            this.columns.settings,
+                            this.columns._state,
+                            this.options,
+                            {unhideHeader: true}
+                        )
                     ]
-
                 }
-
             ]
         }
         if (!tableVirtualDOM.attributes.class?.includes(this.options.classes.table)) {
-            tableVirtualDOM.attributes.class = joinWithSpaces(tableVirtualDOM.attributes.class, this.options.classes.table)
+            tableVirtualDOM.attributes.class = joinWithSpaces(
+                tableVirtualDOM.attributes.class,
+                this.options.classes.table
+            )
         }
         if (this.options.tableRender) {
-            const renderedTableVirtualDOM : (elementNodeType | void) = this.options.tableRender(this.data, tableVirtualDOM, "header")
+            const renderedTableVirtualDOM: elementNodeType | void = this.options.tableRender(
+                this.data,
+                tableVirtualDOM,
+                "header"
+            )
             if (renderedTableVirtualDOM) {
                 tableVirtualDOM = renderedTableVirtualDOM
             }
@@ -501,15 +522,19 @@ export class DataTable {
             const selector = this.wrapperDOM.querySelector(selectorClassSelector)
             if (selector && selector instanceof HTMLSelectElement) {
                 // Change per page
-                selector.addEventListener("change", () => {
-                    this.emit("datatable.perpage:before", this.options.perPage)
-                    this.options.perPage = parseInt(selector.value, 10)
-                    this.update()
+                selector.addEventListener(
+                    "change",
+                    () => {
+                        this.emit("datatable.perpage:before", this.options.perPage)
+                        this.options.perPage = parseInt(selector.value, 10)
+                        this.update()
 
-                    this._fixHeight()
+                        this._fixHeight()
 
-                    this.emit("datatable.perpage", this.options.perPage)
-                }, false)
+                        this.emit("datatable.perpage", this.options.perPage)
+                    },
+                    false
+                )
             }
         }
 
@@ -523,12 +548,11 @@ export class DataTable {
                 }
                 event.preventDefault()
 
-                const searches: { terms: string[], columns: (number[] | undefined) }[] = []
+                const searches: {terms: string[]; columns: number[] | undefined}[] = []
                 const searchFields: HTMLInputElement[] = Array.from(this.wrapperDOM.querySelectorAll(inputSelector))
-                searchFields.filter(
-                    el => el.value.length
-                ).forEach(
-                    el => {
+                searchFields
+                    .filter(el => el.value.length)
+                    .forEach(el => {
                         const andSearch = el.dataset.and || this.options.searchAnd
                         const querySeparator = el.dataset.querySeparator || this.options.searchQuerySeparator
                         const terms = querySeparator ? el.value.split(this.options.searchQuerySeparator) : [el.value]
@@ -537,27 +561,23 @@ export class DataTable {
                                 if (el.dataset.columns) {
                                     searches.push({
                                         terms: [term],
-                                        columns: (JSON.parse(el.dataset.columns) as number[])
+                                        columns: JSON.parse(el.dataset.columns) as number[]
                                     })
                                 } else {
-                                    searches.push({terms: [term],
-                                        columns: undefined})
+                                    searches.push({terms: [term], columns: undefined})
                                 }
                             })
                         } else {
                             if (el.dataset.columns) {
                                 searches.push({
                                     terms,
-                                    columns: (JSON.parse(el.dataset.columns) as number[])
+                                    columns: JSON.parse(el.dataset.columns) as number[]
                                 })
                             } else {
-                                searches.push({terms,
-                                    columns: undefined})
+                                searches.push({terms, columns: undefined})
                             }
                         }
-
-                    }
-                )
+                    })
                 if (searches.length === 1 && searches[0].terms.length === 1) {
                     const search = searches[0]
                     this.search(search.terms[0], search.columns)
@@ -568,28 +588,36 @@ export class DataTable {
         }
 
         // Pager(s) / sorting
-        this.wrapperDOM.addEventListener("click", (event: Event) => {
-            const target = event.target as Element
-            const hyperlink = target.closest("a, button")
-            if (!hyperlink) {
-                return
-            }
+        this.wrapperDOM.addEventListener(
+            "click",
+            (event: Event) => {
+                const target = event.target as Element
+                const hyperlink = target.closest("a, button")
+                if (!hyperlink) {
+                    return
+                }
 
-            if (hyperlink.hasAttribute("data-page")) {
-                this.page(parseInt(hyperlink.getAttribute("data-page"), 10))
-                event.preventDefault()
-            } else if (containsClass(hyperlink, this.options.classes.sorter)) {
-                const visibleIndex = Array.from(hyperlink.parentElement.parentElement.children).indexOf(hyperlink.parentElement)
-                const columnIndex = visibleToColumnIndex(visibleIndex, this.columns.settings)
-                this.columns.sort(columnIndex)
-                event.preventDefault()
-            } else if (containsClass(hyperlink, this.options.classes.filter)) {
-                const visibleIndex = Array.from(hyperlink.parentElement.parentElement.children).indexOf(hyperlink.parentElement)
-                const columnIndex = visibleToColumnIndex(visibleIndex, this.columns.settings)
-                this.columns.filter(columnIndex)
-                event.preventDefault()
-            }
-        }, false)
+                if (hyperlink.hasAttribute("data-page")) {
+                    this.page(parseInt(hyperlink.getAttribute("data-page"), 10))
+                    event.preventDefault()
+                } else if (containsClass(hyperlink, this.options.classes.sorter)) {
+                    const visibleIndex = Array.from(hyperlink.parentElement.parentElement.children).indexOf(
+                        hyperlink.parentElement
+                    )
+                    const columnIndex = visibleToColumnIndex(visibleIndex, this.columns.settings)
+                    this.columns.sort(columnIndex)
+                    event.preventDefault()
+                } else if (containsClass(hyperlink, this.options.classes.filter)) {
+                    const visibleIndex = Array.from(hyperlink.parentElement.parentElement.children).indexOf(
+                        hyperlink.parentElement
+                    )
+                    const columnIndex = visibleToColumnIndex(visibleIndex, this.columns.settings)
+                    this.columns.filter(columnIndex)
+                    event.preventDefault()
+                }
+            },
+            false
+        )
 
         if (this.options.rowNavigation) {
             this.dom.addEventListener("keydown", (event: KeyboardEvent) => {
@@ -597,8 +625,8 @@ export class DataTable {
                     event.preventDefault()
                     event.stopPropagation()
                     let lastRow: rowType
-                    this.pages[this._currentPage-1].find((row: rowType) => {
-                        if (row.index===this.rows.cursor) {
+                    this.pages[this._currentPage - 1].find((row: rowType) => {
+                        if (row.index === this.rows.cursor) {
                             return true
                         }
                         lastRow = row
@@ -607,17 +635,17 @@ export class DataTable {
                     if (lastRow) {
                         this.rows.setCursor(lastRow.index)
                     } else if (!this.onFirstPage) {
-                        this.page(this._currentPage-1, true)
+                        this.page(this._currentPage - 1, true)
                     }
                 } else if (event.key === "ArrowDown") {
                     event.preventDefault()
                     event.stopPropagation()
                     let foundRow: boolean
-                    const nextRow = this.pages[this._currentPage-1].find((row: rowType) => {
+                    const nextRow = this.pages[this._currentPage - 1].find((row: rowType) => {
                         if (foundRow) {
                             return true
                         }
-                        if (row.index===this.rows.cursor) {
+                        if (row.index === this.rows.cursor) {
                             foundRow = true
                         }
                         return false
@@ -625,7 +653,7 @@ export class DataTable {
                     if (nextRow) {
                         this.rows.setCursor(nextRow.index)
                     } else if (!this.onLastPage) {
-                        this.page(this._currentPage+1)
+                        this.page(this._currentPage + 1)
                     }
                 } else if (this.options.rowSelectionKeys.includes(event.key)) {
                     this.emit("datatable.selectrow", this.rows.cursor, event, true)
@@ -725,31 +753,28 @@ export class DataTable {
         if (this._searchQueries.length) {
             rows = []
 
-            this._searchData.forEach((index: number) => rows.push({index,
-                row: this.data.data[index]}))
+            this._searchData.forEach((index: number) => rows.push({index, row: this.data.data[index]}))
         }
 
         if (this.columns._state.filters.length) {
-            this.columns._state.filters.forEach(
-                (filterState: (filterStateType | undefined), column: number) => {
-                    if (!filterState) {
-                        return
-                    }
-                    rows = rows.filter(
-                        (row: {index: number, row: dataRowType}) => {
-                            const cell = row.row.cells[column]
-                            return typeof filterState === "function" ? filterState(cell.data) : cellToText(cell) === filterState
-                        }
-                    )
+            this.columns._state.filters.forEach((filterState: filterStateType | undefined, column: number) => {
+                if (!filterState) {
+                    return
                 }
-            )
+                rows = rows.filter((row: {index: number; row: dataRowType}) => {
+                    const cell = row.row.cells[column]
+                    return typeof filterState === "function" ? filterState(cell.data) : cellToText(cell) === filterState
+                })
+            })
         }
 
         if (this.options.paging && this.options.perPage > 0) {
             // Check for hidden columns
             this.pages = rows
-                .map((_row, i: number) => i % this.options.perPage === 0 ? rows.slice(i, i + this.options.perPage) : null)
-                .filter((page: {row: dataRowType, index: number}[]) => page)
+                .map((_row, i: number) =>
+                    i % this.options.perPage === 0 ? rows.slice(i, i + this.options.perPage) : null
+                )
+                .filter((page: {row: dataRowType; index: number}[]) => page)
         } else {
             this.pages = [rows]
         }
@@ -776,7 +801,7 @@ export class DataTable {
     /**
      * Perform a simple search of the data set
      */
-    search(term: string, columns: (number[] | undefined ) = undefined, source: string = "search") {
+    search(term: string, columns: number[] | undefined = undefined, source: string = "search") {
         this.emit("datatable.search:before", term, this._searchData)
 
         if (!term.length) {
@@ -789,29 +814,27 @@ export class DataTable {
             return false
         }
 
-        this.multiSearch([
-            {terms: [term],
-                columns: columns ? columns : undefined}
-        ], source)
+        this.multiSearch([{terms: [term], columns: columns ? columns : undefined}], source)
 
         this.emit("datatable.search", term, this._searchData)
-
     }
 
     /**
      * Perform a search of the data set searching for up to multiple strings in various columns
      */
-    multiSearch(rawQueries: { terms: string[], columns: (number[] | undefined) }[], source: string = "search") {
+    multiSearch(rawQueries: {terms: string[]; columns: number[] | undefined}[], source: string = "search") {
         if (!this.hasRows) return false
 
         this._currentPage = 1
         this._searchData = []
         // Remove empty queries
-        let queries = rawQueries.map(query => ({
-            columns: query.columns,
-            terms: query.terms.map(term => term.trim()).filter(term => term),
-            source
-        })).filter(query => query.terms.length)
+        let queries = rawQueries
+            .map(query => ({
+                columns: query.columns,
+                terms: query.terms.map(term => term.trim()).filter(term => term),
+                source
+            }))
+            .filter(query => query.terms.length)
 
         this.emit("datatable.multisearch:before", queries, this._searchData)
 
@@ -827,9 +850,14 @@ export class DataTable {
             this.wrapperDOM.classList.remove("search-results")
             return false
         }
-        const queryWords = queries.map(query => this.columns.settings.map(
-            (column, index) => {
-                if (!column || column.hidden || !column.searchable || (query.columns && !query.columns.includes(index))) {
+        const queryWords = queries.map(query =>
+            this.columns.settings.map((column, index) => {
+                if (
+                    !column ||
+                    column.hidden ||
+                    !column.searchable ||
+                    (query.columns && !query.columns.includes(index))
+                ) {
                     return false
                 }
                 let columnQueries = query.terms
@@ -845,8 +873,8 @@ export class DataTable {
                     columnQueries = columnQueries.map(query => query.replace(/[.,/#!$%^&*;:{}=-_`~()]/g, ""))
                 }
                 return columnQueries
-            }
-        ))
+            })
+        )
         this.data.data.forEach((row: dataRowType, idx: number) => {
             const searchRow = row.cells.map((cell, i) => {
                 const column = this.columns.settings[i]
@@ -886,26 +914,31 @@ export class DataTable {
                 return searchItemSeparator ? content.split(searchItemSeparator) : [content]
             })
             if (
-                queryWords.every(
-                    (queryColumn, queryIndex) => queryColumn.find(
-                        (queryColumnWord, index) => {
-                            if (!queryColumnWord) {
-                                return false
-                            }
-                            const column = this.columns.settings[index]
-                            const customSearchMethod = column?.searchMethod || this.options.searchMethod
-                            if (customSearchMethod) {
-                                // For custom search methods, use the actual cell (which may have been resolved from rowspan)
-                                return customSearchMethod(queryColumnWord, (searchRow[index] as cellType), row, index, queries[queryIndex].source)
-                            }
-                            return queryColumnWord.find(queryWord => (searchRow[index] as string[])?.find(searchItem => searchItem?.includes(queryWord)))
+                queryWords.every((queryColumn, queryIndex) =>
+                    queryColumn.find((queryColumnWord, index) => {
+                        if (!queryColumnWord) {
+                            return false
                         }
-                    )
+                        const column = this.columns.settings[index]
+                        const customSearchMethod = column?.searchMethod || this.options.searchMethod
+                        if (customSearchMethod) {
+                            // For custom search methods, use the actual cell (which may have been resolved from rowspan)
+                            return customSearchMethod(
+                                queryColumnWord,
+                                searchRow[index] as cellType,
+                                row,
+                                index,
+                                queries[queryIndex].source
+                            )
+                        }
+                        return queryColumnWord.find(queryWord =>
+                            (searchRow[index] as string[])?.find(searchItem => searchItem?.includes(queryWord))
+                        )
+                    })
                 )
             ) {
                 this._searchData.push(idx)
             }
-
         })
 
         this.wrapperDOM.classList.add("search-results")
@@ -948,21 +981,29 @@ export class DataTable {
     /**
      * Add new row data
      */
-    insert(data: (
-        {headings?: string[], data?: (inputRowType | inputCellType[])[]} | { [key: string]: inputCellType}[])) {
+    insert(data: {headings?: string[]; data?: (inputRowType | inputCellType[])[]} | {[key: string]: inputCellType}[]) {
         let rows: dataRowType[] = []
         if (Array.isArray(data)) {
-            const headings = this.data.headings.map((heading: headerCellType) => heading.data ? String(heading.data) : heading.text)
+            const headings = this.data.headings.map((heading: headerCellType) =>
+                heading.data ? String(heading.data) : heading.text
+            )
             data.forEach((row, rIndex) => {
                 const r: cellType[] = []
                 Object.entries(row).forEach(([heading, cell]) => {
-
                     const index = headings.indexOf(heading)
 
                     if (index > -1) {
-                        r[index] = readDataCell(cell as inputCellType, this.columns.settings[index], this.options.renderNulls)
+                        r[index] = readDataCell(
+                            cell as inputCellType,
+                            this.columns.settings[index],
+                            this.options.renderNulls
+                        )
                     } else if (!this.hasHeadings && !this.hasRows && rIndex === 0) {
-                        r[headings.length] = readDataCell(cell as inputCellType, this.columns.settings[headings.length], this.options.renderNulls)
+                        r[headings.length] = readDataCell(
+                            cell as inputCellType,
+                            this.columns.settings[headings.length],
+                            this.options.renderNulls
+                        )
                         headings.push(heading)
                         this.data.headings.push(readHeaderCell(heading))
                     }
@@ -973,10 +1014,17 @@ export class DataTable {
             })
         } else if (isObject(data)) {
             if (data.headings && !this.hasHeadings && !this.hasRows) {
-                this.data = readTableData(data, undefined, this.columns.settings, this.options.type, this.options.format, this.options.renderNulls)
+                this.data = readTableData(
+                    data,
+                    undefined,
+                    this.columns.settings,
+                    this.options.type,
+                    this.options.format,
+                    this.options.renderNulls
+                )
             } else if (data.data && Array.isArray(data.data)) {
                 rows = data.data.map(row => {
-                    let attributes: { [key: string]: string }
+                    let attributes: {[key: string]: string}
                     let cells: inputCellType[]
                     if (Array.isArray(row)) {
                         attributes = {}
@@ -987,7 +1035,9 @@ export class DataTable {
                     }
                     return {
                         attributes,
-                        cells: cells.map((cell, index) => readDataCell(cell as inputCellType, this.columns.settings[index], this.options.renderNulls))
+                        cells: cells.map((cell, index) =>
+                            readDataCell(cell as inputCellType, this.columns.settings[index], this.options.renderNulls)
+                        )
                     } as dataRowType
                 })
             }
@@ -1049,7 +1099,11 @@ export class DataTable {
         )
 
         if (this.options.tableRender) {
-            const renderedTableVirtualDOM : (elementNodeType | void) = this.options.tableRender(this.data, newTableVirtualDOM, "print")
+            const renderedTableVirtualDOM: elementNodeType | void = this.options.tableRender(
+                this.data,
+                newTableVirtualDOM,
+                "print"
+            )
             if (renderedTableVirtualDOM) {
                 newTableVirtualDOM = renderedTableVirtualDOM
             }
@@ -1072,7 +1126,9 @@ export class DataTable {
      * Show a message in the table
      */
     setMessage(message: string) {
-        const activeHeadings = this.data.headings.filter((heading: headerCellType, index: number) => !this.columns.settings[index]?.hidden)
+        const activeHeadings = this.data.headings.filter(
+            (heading: headerCellType, index: number) => !this.columns.settings[index]?.hidden
+        )
         const colspan = activeHeadings.length || 1
 
         this.options.classes.empty?.split(" ").forEach(className => this.wrapperDOM.classList.add(className))
@@ -1083,7 +1139,7 @@ export class DataTable {
         this.totalPages = 0
         this._renderPagers()
 
-        let newVirtualDOM : elementNodeType = {
+        let newVirtualDOM: elementNodeType = {
             nodeName: "TABLE",
             attributes: this._tableAttributes,
             childNodes: [
@@ -1091,7 +1147,12 @@ export class DataTable {
                     nodeName: "THEAD",
                     childNodes: [
                         headingsToVirtualHeaderRowDOM(
-                            this.data.headings, this.columns.settings, this.columns._state, this.options, {})
+                            this.data.headings,
+                            this.columns.settings,
+                            this.columns._state,
+                            this.options,
+                            {}
+                        )
                     ]
                 },
                 {
@@ -1117,7 +1178,6 @@ export class DataTable {
                         }
                     ]
                 }
-
             ]
         }
 
@@ -1129,7 +1189,11 @@ export class DataTable {
         }
 
         if (this.options.tableRender) {
-            const renderedTableVirtualDOM : (elementNodeType | void) = this.options.tableRender(this.data, newVirtualDOM, "message")
+            const renderedTableVirtualDOM: elementNodeType | void = this.options.tableRender(
+                this.data,
+                newVirtualDOM,
+                "message"
+            )
             if (renderedTableVirtualDOM) {
                 newVirtualDOM = renderedTableVirtualDOM
             }
@@ -1138,7 +1202,6 @@ export class DataTable {
         const diff = this._dd.diff(this._virtualDOM, newVirtualDOM)
         this._dd.apply(this.dom, diff)
         this._virtualDOM = newVirtualDOM
-
     }
 
     /**

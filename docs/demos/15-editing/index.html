@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
         <title>Editing - simple-datatables</title>
         <!-- DataTable Styles -->
-        <link rel="stylesheet" href="../dist/css/style.css">
-        <link rel="stylesheet" href="../dist/css/editing.css">
+        <link rel="stylesheet" href="../dist/css/style.css" />
+        <link rel="stylesheet" href="../dist/css/editing.css" />
         <!-- Demo Styles -->
-        <link rel="stylesheet" href="../demo.css">
+        <link rel="stylesheet" href="../demo.css" />
     </head>
     <body>
         <header>
@@ -22,14 +22,12 @@
 
         <h2>Editing</h2>
         <p>Double-click a cell to edit it.</p>
-        <br>
+        <br />
         <div>
-            <input type="checkbox" id="modal" class="modal">
-            <label for="modal">
-                <strong>Modal:</strong> Show a modal instead of the inline editor
-            </label>
+            <input type="checkbox" id="modal" class="modal" />
+            <label for="modal"> <strong>Modal:</strong> Show a modal instead of the inline editor </label>
         </div>
-        <br>
+        <br />
 
         <table id="demo-table">
             <thead>
@@ -746,15 +744,12 @@
         </table>
 
         <script type="module">
-            import {
-                DataTable,
-                makeEditable
-            } from "../dist/module.js"
+            import {DataTable, makeEditable} from "../dist/module.js"
             let editor = false
             let inline = true
             let table = false
 
-            const resetTable = function() {
+            const resetTable = function () {
                 if (editor) {
                     editor.destroy()
                 }
@@ -782,15 +777,18 @@
                                 const td = editor.event.target.closest("td")
                                 return editor.editCell(td)
                             }
-                        }, {
+                        },
+                        {
                             text: "<span class='mdi mdi-lead-pencil'></span> Edit Row",
                             action: (editor, _event) => {
                                 const tr = editor.event.target.closest("tr")
                                 return editor.editRow(tr)
                             }
-                        }, {
+                        },
+                        {
                             separator: true
-                        }, {
+                        },
+                        {
                             text: "<span class='mdi mdi-delete'></span> Remove",
                             action: (editor, _event) => {
                                 if (confirm("Are you sure?")) {
@@ -803,7 +801,9 @@
                 })
 
                 table.on("editable.save.cell", (newValue, oldValue, row, column) => {
-                    console.log(`cell is saved: newValue=${newValue}, oldValue=${oldValue}, row=${row}, column=${column}`)
+                    console.log(
+                        `cell is saved: newValue=${newValue}, oldValue=${oldValue}, row=${row}, column=${column}`
+                    )
                 })
             }
             resetTable()

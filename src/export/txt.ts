@@ -1,28 +1,19 @@
-import {
-    cellToText,
-    isObject
-} from "../helpers"
+import {cellToText, isObject} from "../helpers"
 import {DataTable} from "../datatable"
-import {
-    cellDataType,
-    cellType,
-    dataRowType,
-    headerCellType
-} from "../types"
+import {cellDataType, cellType, dataRowType, headerCellType} from "../types"
 /**
  * Export table to TXT
  */
- interface txtUserOptions {
-   download?: boolean,
-   skipColumn?: number[],
-   lineDelimiter?: string,
-   columnDelimiter?: string,
-   selection?: number | number[],
-   filename?: string,
- }
+interface txtUserOptions {
+    download?: boolean
+    skipColumn?: number[]
+    lineDelimiter?: string
+    columnDelimiter?: string
+    selection?: number | number[]
+    filename?: string
+}
 
-
-export const exportTXT = function(dt: DataTable, userOptions : txtUserOptions = {}) {
+export const exportTXT = function (dt: DataTable, userOptions: txtUserOptions = {}) {
     if (!dt.hasHeadings && !dt.hasRows) return false
 
     const defaults = {
@@ -44,7 +35,9 @@ export const exportTXT = function(dt: DataTable, userOptions : txtUserOptions = 
 
     const columnShown = (index: number) => !options.skipColumn.includes(index) && !dt.columns.settings[index]?.hidden
 
-    const headers = dt.data.headings.filter((_heading: headerCellType, index: number) => columnShown(index)).map((header: headerCellType) => header.text ?? header.data)
+    const headers = dt.data.headings
+        .filter((_heading: headerCellType, index: number) => columnShown(index))
+        .map((header: headerCellType) => header.text ?? header.data)
 
     // Selection or whole table
     let selectedRows: dataRowType[]
@@ -63,13 +56,15 @@ export const exportTXT = function(dt: DataTable, userOptions : txtUserOptions = 
         selectedRows = dt.data.data
     }
 
-    let rows : cellDataType[][] = []
+    let rows: cellDataType[][] = []
     // Include headings
     rows[0] = headers
-    rows = rows.concat(selectedRows.map((row: dataRowType) => {
-        const shownCells = row.cells.filter((_cell: cellType, index: number) => columnShown(index))
-        return shownCells.map((cell: cellType) => cellToText(cell))
-    }))
+    rows = rows.concat(
+        selectedRows.map((row: dataRowType) => {
+            const shownCells = row.cells.filter((_cell: cellType, index: number) => columnShown(index))
+            return shownCells.map((cell: cellType) => cellToText(cell))
+        })
+    )
 
     // Only proceed if we have data
     if (rows.length) {
@@ -81,7 +76,7 @@ export const exportTXT = function(dt: DataTable, userOptions : txtUserOptions = 
                     cell = cell.trim()
                     cell = cell.replace(/\s{2,}/g, " ")
                     cell = cell.replace(/\n/g, "  ")
-                    cell = cell.replace(/"/g, "\"\"")
+                    cell = cell.replace(/"/g, '""')
                     //have to manually encode "#" as encodeURI leaves it as is.
                     cell = cell.replace(/#/g, "%23")
                     if (cell.includes(",")) {
@@ -95,7 +90,6 @@ export const exportTXT = function(dt: DataTable, userOptions : txtUserOptions = 
 
             // Apply line delimiter
             str += options.lineDelimiter
-
         })
 
         // Remove trailing line delimiter

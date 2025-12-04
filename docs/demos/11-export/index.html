@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
         <title>Export - simple-datatables</title>
         <!-- DataTable Styles -->
-        <link rel="stylesheet" href="../dist/css/style.css">
+        <link rel="stylesheet" href="../dist/css/style.css" />
         <!-- Demo Styles -->
-        <link rel="stylesheet" href="../demo.css">
+        <link rel="stylesheet" href="../demo.css" />
     </head>
     <body>
         <header>
@@ -740,15 +740,9 @@
         <button id="export-custom">Export Custom</button>
 
         <script type="module">
-            import {
-                DataTable,
-                exportJSON,
-                exportCSV,
-                exportTXT,
-                exportSQL
-            } from "../dist/module.js"
+            import {DataTable, exportJSON, exportCSV, exportTXT, exportSQL} from "../dist/module.js"
 
-            const exportCustomCSV = function(dataTable, userOptions = {}) {
+            const exportCustomCSV = function (dataTable, userOptions = {}) {
                 // A modified CSV export that includes a row of minuses at the start and end.
                 const clonedUserOptions = {
                     ...userOptions
@@ -768,7 +762,10 @@
                     ...defaults,
                     ...clonedUserOptions
                 }
-                const separatorRow = Array(dataTable.data.headings.filter((_heading, index) => !dataTable.columns.settings[index]?.hidden).length)
+                const separatorRow = Array(
+                    dataTable.data.headings.filter((_heading, index) => !dataTable.columns.settings[index]?.hidden)
+                        .length
+                )
                     .fill("-")
                     .join(options.columnDelimiter)
                 const str = `${separatorRow}${options.lineDelimiter}${csv}${options.lineDelimiter}${separatorRow}`

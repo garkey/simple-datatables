@@ -47,7 +47,7 @@ module.exports = defineConfig([{
 
     "rules": {
         "accessor-pairs": "error",
-        "array-bracket-newline": "error",
+        "array-bracket-newline": ["error", { "multiline": true }],
         "array-bracket-spacing": ["error", "never"],
         "array-callback-return": "off",
         "array-element-newline": "off",
@@ -88,7 +88,7 @@ module.exports = defineConfig([{
 
         "eol-last": "error",
         "eqeqeq": "off",
-        "func-call-spacing": "error",
+        "func-call-spacing": ["error", "never"],
         "func-name-matching": "error",
         "func-names": ["error", "never"],
         "func-style": ["error", "expression"],
@@ -240,7 +240,7 @@ module.exports = defineConfig([{
         "one-var-declaration-per-line": "error",
         "operator-assignment": "off",
         "operator-linebreak": ["error", "after"],
-        "padded-blocks": "off",
+        "padded-blocks": ["error", "never"],
         "padding-line-between-statements": "error",
         "prefer-arrow-callback": "error",
         "prefer-const": "error",
@@ -273,12 +273,14 @@ module.exports = defineConfig([{
         "sort-vars": "error",
         "space-before-blocks": "error",
         "space-before-function-paren": "off",
-        "space-in-parens": "off",
+        // "space-in-parens": "off",
+        "space-infix-ops": "error",
+        "space-in-parens": ["error", "never"],
         "space-infix-ops": "off",
         "space-unary-ops": "error",
         "spaced-comment": "off",
         "strict": "error",
-        "switch-colon-spacing": "error",
+        "switch-colon-spacing": ["error", { "after": true, "before": false }],
         "symbol-description": "error",
         "template-curly-spacing": ["error", "never"],
         "template-tag-spacing": "error",
@@ -317,9 +319,6 @@ module.exports = defineConfig([{
     extends: compat.extends("plugin:@html-eslint/recommended"),
     
     rules: {
-        "indent": "off",
-        "no-mixed-spaces-and-tabs": "off",
-        "no-trailing-spaces": "off",
     },
 }, {
     files: ["**/*.mjs"],

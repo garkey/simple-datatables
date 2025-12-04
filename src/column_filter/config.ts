@@ -1,7 +1,7 @@
 /**
-* Default config
-* @type {Object}
-*/
+ * Default config
+ * @type {Object}
+ */
 //import {ColumnFilter} from "./column_filter"
 
 export const defaultConfig = {

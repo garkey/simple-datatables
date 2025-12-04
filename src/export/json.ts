@@ -1,31 +1,21 @@
-import {
-    cellToText,
-    isObject
-} from "../helpers"
+import {cellToText, isObject} from "../helpers"
 import {DataTable} from "../datatable"
-import {
-    cellDataType,
-    cellType,
-    dataRowType,
-    headerCellType
-} from "../types"
+import {cellDataType, cellType, dataRowType, headerCellType} from "../types"
 /**
  * Export table to JSON
  */
 
- interface jsonUserOptions {
-   download?: boolean,
-   skipColumn?: number[],
-   replacer?: null | ((key, value) => string) | (string | number)[],
-   space?: number,
-   selection?: number | number[],
-   filename?: string,
- }
+interface jsonUserOptions {
+    download?: boolean
+    skipColumn?: number[]
+    replacer?: null | ((key, value) => string) | (string | number)[]
+    space?: number
+    selection?: number | number[]
+    filename?: string
+}
 
-
-export const exportJSON = function(dt: DataTable, userOptions: jsonUserOptions = {}) {
+export const exportJSON = function (dt: DataTable, userOptions: jsonUserOptions = {}) {
     if (!dt.hasHeadings && !dt.hasRows) return false
-
 
     const defaults = {
         download: true,
@@ -68,11 +58,13 @@ export const exportJSON = function(dt: DataTable, userOptions: jsonUserOptions =
         return shownCells.map((cell: cellType) => cellToText(cell))
     })
 
-    const headers = dt.data.headings.filter((_heading: headerCellType, index: number) => columnShown(index)).map((header: headerCellType) => header.text ?? String(header.data))
+    const headers = dt.data.headings
+        .filter((_heading: headerCellType, index: number) => columnShown(index))
+        .map((header: headerCellType) => header.text ?? String(header.data))
 
     // Only proceed if we have data
     if (rows.length) {
-        const arr: (void | { [key: string]: cellDataType})[] = []
+        const arr: (void | {[key: string]: cellDataType})[] = []
         rows.forEach((row: cellDataType[], x: number) => {
             arr[x] = arr[x] || {}
             row.forEach((cell: cellDataType, i: number) => {
@@ -87,14 +79,10 @@ export const exportJSON = function(dt: DataTable, userOptions: jsonUserOptions =
         if (options.download) {
             // Create a link to trigger the download
 
-            const blob = new Blob(
-                [str],
-                {
-                    type: "data:application/json;charset=utf-8"
-                }
-            )
+            const blob = new Blob([str], {
+                type: "data:application/json;charset=utf-8"
+            })
             const url = URL.createObjectURL(blob)
-
 
             const link = document.createElement("a")
             link.href = url

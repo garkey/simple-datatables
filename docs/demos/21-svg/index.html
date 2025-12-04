@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
         <title>SVGs - simple-datatables</title>
         <!-- DataTable Styles -->
-        <link rel="stylesheet" href="../dist/css/style.css">
+        <link rel="stylesheet" href="../dist/css/style.css" />
         <!-- Demo Styles -->
-        <link rel="stylesheet" href="../demo.css">
+        <link rel="stylesheet" href="../demo.css" />
         <style>
             table tr td img,
             table tr td svg {
@@ -99,7 +99,10 @@
                 for (let i = 0; i < 100; i++) {
                     const iconId = Math.floor(Math.random() * machineTypeIcons.length)
                     const machineType = machineTypeIcons[iconId].name
-                    tableData.data.push([`Machine ${i}`, `${getMachineTypeIcon(machineType)} <span>${machineType}</span>`])
+                    tableData.data.push([
+                        `Machine ${i}`,
+                        `${getMachineTypeIcon(machineType)} <span>${machineType}</span>`
+                    ])
                 }
                 return tableData
             }

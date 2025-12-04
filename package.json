@@ -12,7 +12,7 @@
     "test": "mocha",
     "test_server": "node --watch test/server.mjs",
     "lint": "eslint src/ docs/demos/ test/",
-    "pre-commit": "eslint --fix src/ docs/demos/ test/",
+    "pre-commit": "eslint --fix src/ docs/demos/ test/ && npx prettier -w src/ docs/demos/",
     "build": "npm run build_js && npm run build_js_umd && npm run build_css && npm run build_demos",
     "build_js": "rollup -c",
     "build_js:watch": "rollup -c --watch",

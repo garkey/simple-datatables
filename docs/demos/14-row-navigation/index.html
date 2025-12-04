@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
         <title>Row navigation - simple-datatables</title>
         <!-- DataTable Styles -->
-        <link rel="stylesheet" href="../dist/css/style.css">
+        <link rel="stylesheet" href="../dist/css/style.css" />
         <!-- Demo Styles -->
-        <link rel="stylesheet" href="../demo.css">
+        <link rel="stylesheet" href="../demo.css" />
         <style>
             tr {
                 cursor: pointer;
@@ -33,21 +33,21 @@
             Select the table below either by clicking on it or by using the TAB-key. Then use the up/down arrow-keys to
             navigate the table. Either click on a row or hit Enter/Space/x after navigating to select it.
         </p>
-        <br>
+        <br />
 
         <div>
-            <input type="checkbox" id="multi-select" checked>
+            <input type="checkbox" id="multi-select" checked />
             <label for="multi-select">
                 <strong>Multi select:</strong> Whether to allow selection of more than one row.
             </label>
         </div>
         <div>
-            <input type="checkbox" id="row-navigation" checked>
+            <input type="checkbox" id="row-navigation" checked />
             <label for="row-navigation">
                 <strong>Row navigation:</strong> Whether to allow keyboard row navigation.
             </label>
         </div>
-        <br>
+        <br />
 
         <table id="demo-table">
             <thead>
@@ -763,14 +763,12 @@
             </tbody>
         </table>
         <script type="module">
-            import {
-                DataTable
-            } from "../dist/module.js"
+            import {DataTable} from "../dist/module.js"
             let multiSelect = true
             let rowNavigation = true
             let table = null
 
-            const resetTable = function() {
+            const resetTable = function () {
                 if (table) {
                     table.destroy()
                 }
@@ -788,7 +786,6 @@
                         }
                         tr.attributes.class += " selected"
                         return tr
-
                     }
                 }
                 if (rowNavigation) {
@@ -805,7 +802,6 @@
                 })
 
                 table.on("datatable.selectrow", (rowIndex, event, focused) => {
-
                     if (!focused) {
                         return
                     }

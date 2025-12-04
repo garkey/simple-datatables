@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
         <title>Checkbox column - simple-datatables</title>
         <!-- DataTable Styles -->
-        <link rel="stylesheet" href="../dist/css/style.css">
+        <link rel="stylesheet" href="../dist/css/style.css" />
         <!-- Demo Styles -->
-        <link rel="stylesheet" href="../demo.css">
+        <link rel="stylesheet" href="../demo.css" />
         <style>
             span.checkbox {
                 cursor: pointer;
@@ -29,14 +29,11 @@
         <table id="demo-table"></table>
 
         <script type="module">
-            import {
-                DataTable
-            } from "../dist/module.js"
+            import {DataTable} from "../dist/module.js"
             // Instantiate
-            fetch("datatable.json").then(
-                response => response.json()
-            ).then(
-                data => {
+            fetch("datatable.json")
+                .then(response => response.json())
+                .then(data => {
                     const datatable = new DataTable("#demo-table", {
                         type: "string",
                         data: {
@@ -54,7 +51,8 @@
                             {
                                 select: 0,
                                 sortable: false,
-                                render: (value, _td, _rowIndex, _cellIndex) => `<span class="checkbox">${value ? "☑" : "☐"}</span>`
+                                render: (value, _td, _rowIndex, _cellIndex) =>
+                                    `<span class="checkbox">${value ? "☑" : "☐"}</span>`
                             }
                         ]
                     })
@@ -71,15 +69,11 @@
                             datatable.update()
 
                             // Timeout used for the checkbox to have time to update and show as checked. It is not required.
-                            setTimeout(
-                                () => alert(`"${name}" has been ${checked ? "unchecked" : "checked"}.`),
-                                0
-                            )
+                            setTimeout(() => alert(`"${name}" has been ${checked ? "unchecked" : "checked"}.`), 0)
                         }
                     })
                     window.datatable = datatable
-                }
-            )
+                })
         </script>
     </body>
 </html>

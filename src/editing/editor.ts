@@ -7,20 +7,13 @@ import {
     escapeText,
     visibleToColumnIndex
 } from "../helpers"
-import {
-    cellType,
-    rowRenderType,
-    elementNodeType
-} from "../types"
+import {cellType, rowRenderType, elementNodeType} from "../types"
 import {DataTable} from "../datatable"
 import {parseDate} from "../date"
 
-import {
-    defaultConfig
-} from "./config"
+import {defaultConfig} from "./config"
 
 import {menuItemType, dataType, EditorOptions} from "./types"
-
 
 /**
  * Main lib
@@ -46,11 +39,11 @@ export class Editor {
 
     event: Event
 
-    events: { [key: string]: () => void}
+    events: {[key: string]: () => void}
 
     initialized: boolean
 
-    limits: {x: number, y: number}
+    limits: {x: number; y: number}
 
     menuDOM: HTMLElement
 
@@ -60,7 +53,7 @@ export class Editor {
 
     originalRowRender: rowRenderType | false
 
-    rect: {width: number, height: number}
+    rect: {width: number; height: number}
 
     wrapperDOM: HTMLElement
 
@@ -214,9 +207,9 @@ export class Editor {
         }
         if (this.editing && this.data && this.editingCell) {
             const inputSelector = classNamesToSelector(this.options.classes.input)
-            const input = this.modalDOM ?
-                (this.modalDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement) :
-                (this.dt.wrapperDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement)
+            const input = this.modalDOM
+                ? (this.modalDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement)
+                : (this.dt.wrapperDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement)
             this.saveCell(input.value)
         } else if (!this.editing) {
             const cell = target.closest("tbody td") as HTMLTableCellElement
@@ -235,17 +228,23 @@ export class Editor {
     keydown(event: KeyboardEvent) {
         const inputSelector = classNamesToSelector(this.options.classes.input)
         if (this.modalDOM) {
-            if (event.key === "Escape") { // close button
+            if (event.key === "Escape") {
+                // close button
                 if (this.options.cancelModal(this)) {
                     this.closeModal()
                 }
-            } else if (event.key === "Enter") { // save button
+            } else if (event.key === "Enter") {
+                // save button
                 // Save
                 if (this.editingCell) {
-                    const input = (this.modalDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement)
+                    const input = this.modalDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement
                     this.saveCell(input.value)
                 } else {
-                    const values = (Array.from(this.modalDOM.querySelectorAll(`input${inputSelector}[type=text]`)) as HTMLInputElement[]).map(input => input.value.trim())
+                    const values = (
+                        Array.from(
+                            this.modalDOM.querySelectorAll(`input${inputSelector}[type=text]`)
+                        ) as HTMLInputElement[]
+                    ).map(input => input.value.trim())
                     this.saveRow(values, this.data.row)
                 }
             }
@@ -253,10 +252,16 @@ export class Editor {
             if (event.key === "Enter") {
                 // Enter key saves
                 if (this.editingCell) {
-                    const input = (this.dt.wrapperDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement)
+                    const input = this.dt.wrapperDOM.querySelector(
+                        `input${inputSelector}[type=text]`
+                    ) as HTMLInputElement
                     this.saveCell(input.value)
                 } else if (this.editingRow) {
-                    const values = (Array.from(this.dt.wrapperDOM.querySelectorAll(`input${inputSelector}[type=text]`)) as HTMLInputElement[]).map(input => input.value.trim())
+                    const values = (
+                        Array.from(
+                            this.dt.wrapperDOM.querySelectorAll(`input${inputSelector}[type=text]`)
+                        ) as HTMLInputElement[]
+                    ).map(input => input.value.trim())
                     this.saveRow(values, this.data.row)
                 }
             } else if (event.key === "Escape") {
@@ -332,7 +337,7 @@ export class Editor {
         this.modalDOM = modalDOM
         this.openModal()
         const inputSelector = classNamesToSelector(this.options.classes.input)
-        const input = (modalDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement)
+        const input = modalDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement
         input.focus()
         input.selectionStart = input.selectionEnd = input.value.length
         // Close / save
@@ -341,12 +346,14 @@ export class Editor {
             if (!(target instanceof Element)) {
                 return
             }
-            if (target.hasAttribute("data-editor-cancel")) { // cancel button
+            if (target.hasAttribute("data-editor-cancel")) {
+                // cancel button
                 event.preventDefault()
                 if (this.options.cancelModal(this)) {
                     this.closeModal()
                 }
-            } else if (target.hasAttribute("data-editor-save")) { // save button
+            } else if (target.hasAttribute("data-editor-save")) {
+                // save button
                 event.preventDefault()
                 // Save
                 this.saveCell(input.value)
@@ -370,27 +377,17 @@ export class Editor {
             cell = {data: parseFloat(stringValue)}
         } else if (type === "boolean") {
             if (["", "false", "0"].includes(stringValue)) {
-                cell = {data: false,
-                    text: "false",
-                    order: 0}
+                cell = {data: false, text: "false", order: 0}
             } else {
-                cell = {data: true,
-                    text: "true",
-                    order: 1}
+                cell = {data: true, text: "true", order: 1}
             }
         } else if (type === "html") {
-            cell = {data: [
-                {nodeName: "#text",
-                    data: value}
-            ],
-            text: value,
-            order: value}
+            cell = {data: [{nodeName: "#text", data: value}], text: value, order: value}
         } else if (type === "string") {
             cell = {data: value}
         } else if (type === "date") {
             const format = this.dt.columns.settings[this.data.columnIndex].format || this.dt.options.format
-            cell = {data: value,
-                order: parseDate(String(value), format)}
+            cell = {data: value, order: parseDate(String(value), format)}
         } else {
             cell = {data: value}
         }
@@ -464,17 +461,23 @@ export class Editor {
         // Add the inputs for each cell
         row.forEach((cell: cellType, i: number) => {
             const columnSettings = this.dt.columns.settings[i]
-            if ((!columnSettings.hidden || (columnSettings.hidden && this.options.hiddenColumns)) && !this.options.excludeColumns.includes(i)) {
+            if (
+                (!columnSettings.hidden || (columnSettings.hidden && this.options.hiddenColumns)) &&
+                !this.options.excludeColumns.includes(i)
+            ) {
                 const label = this.dt.data.headings[i].text || String(this.dt.data.headings[i].data)
-                form.insertBefore(createElement("div", {
-                    class: this.options.classes.row,
-                    html: [
-                        `<div class='${this.options.classes.row}'>`,
-                        `<label class='${this.options.classes.label}'>${escapeText(label)}</label>`,
-                        `<input class='${this.options.classes.input}' value='${escapeText(cellToText(cell))}' type='text'>`,
-                        "</div>"
-                    ].join("")
-                }), form.lastElementChild)
+                form.insertBefore(
+                    createElement("div", {
+                        class: this.options.classes.row,
+                        html: [
+                            `<div class='${this.options.classes.row}'>`,
+                            `<label class='${this.options.classes.label}'>${escapeText(label)}</label>`,
+                            `<input class='${this.options.classes.input}' value='${escapeText(cellToText(cell))}' type='text'>`,
+                            "</div>"
+                        ].join("")
+                    }),
+                    form.lastElementChild
+                )
             }
         })
         this.modalDOM = modalDOM
@@ -489,11 +492,13 @@ export class Editor {
             if (!(target instanceof Element)) {
                 return
             }
-            if (target.hasAttribute("data-editor-cancel")) { // cancel button
+            if (target.hasAttribute("data-editor-cancel")) {
+                // cancel button
                 if (this.options.cancelModal(this)) {
                     this.closeModal()
                 }
-            } else if (target.hasAttribute("data-editor-save")) { // save button
+            } else if (target.hasAttribute("data-editor-save")) {
+                // save button
                 // Save
                 const values = inputs.map((input: HTMLInputElement) => input.value.trim())
                 this.saveRow(values, this.data.row)
@@ -525,20 +530,13 @@ export class Editor {
                     cell = {data: parseFloat(value)}
                 } else if (type === "boolean") {
                     if (["", "false", "0"].includes(value)) {
-                        cell = {data: false,
-                            text: "false",
-                            order: 0}
+                        cell = {data: false, text: "false", order: 0}
                     } else {
-                        cell = {data: true,
-                            text: "true",
-                            order: 1}
+                        cell = {data: true, text: "true", order: 1}
                     }
                 } else if (type === "html") {
                     cell = {
-                        data: [
-                            {nodeName: "#text",
-                                data: value}
-                        ],
+                        data: [{nodeName: "#text", data: value}],
                         text: value,
                         order: value
                     }
@@ -546,13 +544,11 @@ export class Editor {
                     cell = {data: value}
                 } else if (type === "date") {
                     const format = this.dt.columns.settings[colIndex].format || this.dt.options.format
-                    cell = {data: value,
-                        order: parseDate(String(value), format)}
+                    cell = {data: value, order: parseDate(String(value), format)}
                 } else {
                     cell = {data: value}
                 }
                 return cell
-
             })
         }
 
@@ -625,7 +621,7 @@ export class Editor {
         let valid = true
         if (this.editing) {
             const inputSelector = classNamesToSelector(this.options.classes.input)
-            valid = !(target.matches(`input${inputSelector}[type=text]`))
+            valid = !target.matches(`input${inputSelector}[type=text]`)
         }
         if (valid) {
             this.closeMenu()
@@ -639,9 +635,9 @@ export class Editor {
     openMenu() {
         if (this.editing && this.data && this.editingCell) {
             const inputSelector = classNamesToSelector(this.options.classes.input)
-            const input = this.modalDOM ?
-                (this.modalDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement) :
-                (this.dt.wrapperDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement)
+            const input = this.modalDOM
+                ? (this.modalDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement)
+                : (this.dt.wrapperDOM.querySelector(`input${inputSelector}[type=text]`) as HTMLInputElement)
 
             this.saveCell(input.value)
         }
@@ -721,14 +717,12 @@ export class Editor {
                     ]
                 }
             })
-
         }
         return tr
-
     }
 }
 
-export const makeEditable = function(dataTable: DataTable, options = {}) {
+export const makeEditable = function (dataTable: DataTable, options = {}) {
     const editor = new Editor(dataTable, options)
     if (dataTable.initialized) {
         editor.init()

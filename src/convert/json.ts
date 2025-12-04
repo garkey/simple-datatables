@@ -1,20 +1,17 @@
-import {
-    isJson,
-    isObject
-} from "../helpers"
+import {isJson, isObject} from "../helpers"
 
 interface jsonConvertUserOptions {
-  lineDelimiter?: string,
-  columnDelimiter?: string
-  removeDoubleQuotes?: boolean
-  data: string,
-  headings?: string[],
+    lineDelimiter?: string
+    columnDelimiter?: string
+    removeDoubleQuotes?: boolean
+    data: string
+    headings?: string[]
 }
 
 /**
  * Convert JSON data to fit the format used in the table.
  */
-export const convertJSON = function(userOptions : jsonConvertUserOptions) {
+export const convertJSON = function (userOptions: jsonConvertUserOptions) {
     let obj
     const defaults = {
         data: ""
@@ -41,7 +38,7 @@ export const convertJSON = function(userOptions : jsonConvertUserOptions) {
                 data: []
             }
 
-            json.forEach((data: { [key: string]: string | number | boolean | null | undefined}, i: number) => {
+            json.forEach((data: {[key: string]: string | number | boolean | null | undefined}, i: number) => {
                 obj.data[i] = []
                 Object.entries(data).forEach(([column, value]) => {
                     if (!obj.headings.includes(column)) {

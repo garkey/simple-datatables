@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
         <title>Server-Side Processing - simple-datatables</title>
         <!-- DataTable Styles -->
-        <link rel="stylesheet" href="../dist/css/style.css">
+        <link rel="stylesheet" href="../dist/css/style.css" />
         <!-- Demo Styles -->
-        <link rel="stylesheet" href="../demo.css">
+        <link rel="stylesheet" href="../demo.css" />
         <style>
             .controls {
                 margin: 20px 0;
@@ -99,15 +99,27 @@
         <div class="controls">
             <div class="control-group">
                 <h3>Server-Side Search</h3>
-                <p style="margin: 0 0 10px 0; font-size: 0.9em; color: #666;">
-                    Search across all employee data. This simulates server-side filtering - data is filtered before being sent to the table. Try searching for names, departments, or positions. <strong>Click "Search" or press Enter to execute the search.</strong>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em; color: #666">
+                    Search across all employee data. This simulates server-side filtering - data is filtered before
+                    being sent to the table. Try searching for names, departments, or positions.
+                    <strong>Click "Search" or press Enter to execute the search.</strong>
                 </p>
                 <div class="search-controls">
-                    <input type="text" id="server-search" placeholder="Search by name, email, department, etc...">
+                    <input type="text" id="server-search" placeholder="Search by name, email, department, etc..." />
                     <button class="btn" id="search-btn">Search</button>
                     <button class="btn" id="clear-search">Clear</button>
                 </div>
-                <div id="search-status" style="display: none; margin-top: 8px; padding: 6px 12px; background: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 4px; font-size: 0.9em;"></div>
+                <div
+                    id="search-status"
+                    style="
+                        display: none;
+                        margin-top: 8px;
+                        padding: 6px 12px;
+                        background: #e7f3ff;
+                        border: 1px solid #b3d9ff;
+                        border-radius: 4px;
+                        font-size: 0.9em;
+                    "></div>
             </div>
 
             <div class="control-group">
@@ -142,72 +154,72 @@
 
             // Simulate server-side data loading
             let currentData = null
-let filteredData = null
-let datatable = null
-let currentSearchTerm = ""
-let isDatatableReady = false
-let reorderEventListeners = []
+            let filteredData = null
+            let datatable = null
+            let currentSearchTerm = ""
+            let isDatatableReady = false
+            let reorderEventListeners = []
 
-// Function to load data from "server" (JSON file)
-async function loadData() {
+            // Function to load data from "server" (JSON file)
+            async function loadData() {
                 try {
                     // In a real application, this would be an actual server API call:
                     // const response = await fetch("/api/employees");
                     const response = await fetch("data.json")
-        const data = await response.json()
-        currentData = data
-        filteredData = data // Initially show all data
-        return data
-    } catch (error) {
+                    const data = await response.json()
+                    currentData = data
+                    filteredData = data // Initially show all data
+                    return data
+                } catch (error) {
                     console.error("Error loading data:", error)
-        return []
-    }
+                    return []
+                }
             }
 
             // Server-side search function
             async function performServerSearch(searchTerm) {
                 if (!searchTerm.trim()) {
                     return currentData // Return all data if no search term
-    }
+                }
 
                 // Simulate server API call delay
                 await new Promise(resolve => setTimeout(resolve, 300))
 
-    // In a real application, this would be an actual server API call:
-    // const response = await fetch(`/api/employees?search=${encodeURIComponent(searchTerm)}`);
-    // const filteredData = await response.json();
+                // In a real application, this would be an actual server API call:
+                // const response = await fetch(`/api/employees?search=${encodeURIComponent(searchTerm)}`);
+                // const filteredData = await response.json();
 
-    const searchLower = searchTerm.toLowerCase()
-    const filteredData = currentData.filter(item =>
-        // Search across all string fields
-        Object.values(item).some(value => {
-            if (typeof value === "string") {
+                const searchLower = searchTerm.toLowerCase()
+                const filteredData = currentData.filter(item =>
+                    // Search across all string fields
+                    Object.values(item).some(value => {
+                        if (typeof value === "string") {
                             return value.toLowerCase().includes(searchLower)
-            }
-            if (typeof value === "number") {
+                        }
+                        if (typeof value === "number") {
                             return value.toString().includes(searchTerm)
-            }
-            return false
-        })
-    )
+                        }
+                        return false
+                    })
+                )
 
-    currentSearchTerm = searchTerm
-    return filteredData
-}
+                currentSearchTerm = searchTerm
+                return filteredData
+            }
 
             // Function to update datatable with new data
             function updateDataTable(data) {
                 if (!datatable) return
 
-    // Update search status display
-    const searchStatus = document.getElementById("search-status")
-    if (searchStatus) {
+                // Update search status display
+                const searchStatus = document.getElementById("search-status")
+                if (searchStatus) {
                     if (currentSearchTerm) {
                         searchStatus.textContent = `Showing ${data.length} results for "${currentSearchTerm}"`
-            searchStatus.style.display = "block"
-        } else {
+                        searchStatus.style.display = "block"
+                    } else {
                         searchStatus.style.display = "none"
-        }
+                    }
                 }
 
                 const tableData = {
@@ -215,13 +227,13 @@ async function loadData() {
                     data: data.map(item => Object.values(item))
                 }
 
-    // Store current column state before destroying
-    const currentColumnState = datatable.columns.settings
+                // Store current column state before destroying
+                const currentColumnState = datatable.columns.settings
 
-    datatable.destroy()
-    isDatatableReady = false
+                datatable.destroy()
+                isDatatableReady = false
 
-    datatable = new DataTable("#demo-table", {
+                datatable = new DataTable("#demo-table", {
                     data: tableData,
                     perPage: 10,
                     perPageSelect: [5, 10, 15, 20],
@@ -235,35 +247,34 @@ async function loadData() {
                     }
                 })
 
-    // Wait for datatable to be fully initialized before setting up controls
-    datatable.on("datatable.init", () => {
+                // Wait for datatable to be fully initialized before setting up controls
+                datatable.on("datatable.init", () => {
                     isDatatableReady = true
 
-
-        // Re-apply column state after recreation
-        if (currentColumnState) {
+                    // Re-apply column state after recreation
+                    if (currentColumnState) {
                         datatable.columns.settings = currentColumnState
-            datatable.refresh()
-        }
+                        datatable.refresh()
+                    }
 
                     // Re-setup controls after data update
                     setupColumnControls()
-    })
-}
+                })
+            }
 
             // Function to initialize or refresh the datatable
             async function initializeDataTable() {
                 const data = await loadData()
 
-    if (!data || !data.length) {
+                if (!data || !data.length) {
                     console.error("No data loaded")
-        return
-    }
+                    return
+                }
 
                 // If datatable already exists, destroy it first
                 if (datatable) {
                     datatable.destroy()
-    }
+                }
 
                 // Initialize datatable with server data
                 datatable = new DataTable("#demo-table", {
@@ -283,167 +294,161 @@ async function loadData() {
                     }
                 })
 
-    // Wait for datatable to be fully initialized before setting up controls
-    datatable.on("datatable.init", () => {
+                // Wait for datatable to be fully initialized before setting up controls
+                datatable.on("datatable.init", () => {
                     isDatatableReady = true
 
+                    // Setup column visibility controls after initialization
+                    setupColumnControls()
 
-        // Setup column visibility controls after initialization
-        setupColumnControls()
+                    // Setup event listeners for reordering buttons
+                    setupReorderControls()
+                })
 
-        // Setup event listeners for reordering buttons
-        setupReorderControls()
-    })
-
-    datatable.on("datatable.destroy", cleanupReorderEventListeners)
-}
+                datatable.on("datatable.destroy", cleanupReorderEventListeners)
+            }
 
             // Setup column visibility toggle buttons
             function setupColumnControls() {
                 if (!isDatatableReady) {
-
                     return
-    }
+                }
 
                 const controlsContainer = document.getElementById("visibility-controls")
-    controlsContainer.innerHTML = ""
+                controlsContainer.innerHTML = ""
 
-    // Use data.headings instead of datatable.headings
-    const headings = datatable.data.headings.map(heading => heading.data)
+                // Use data.headings instead of datatable.headings
+                const headings = datatable.data.headings.map(heading => heading.data)
 
-    headings.forEach((heading, index) => {
+                headings.forEach((heading, index) => {
                     const button = document.createElement("button")
-        button.className = "btn active"
-        button.textContent = `${heading} (Show)`
-        button.dataset.columnIndex = index
-        button.dataset.visible = "true"
-        button.dataset.heading = heading
+                    button.className = "btn active"
+                    button.textContent = `${heading} (Show)`
+                    button.dataset.columnIndex = index
+                    button.dataset.visible = "true"
+                    button.dataset.heading = heading
 
-        button.addEventListener("click", () => {
+                    button.addEventListener("click", () => {
                         if (!isDatatableReady) {
-
                             return
-            }
+                        }
 
                         const columnIndex = parseInt(button.dataset.columnIndex)
-            const isVisible = button.dataset.visible === "true"
+                        const isVisible = button.dataset.visible === "true"
 
-            if (isVisible) {
+                        if (isVisible) {
                             // Hide column
                             datatable.columns.hide(columnIndex)
                             button.textContent = `${button.dataset.heading} (Hide)`
                             button.dataset.visible = "false"
                             button.classList.remove("active")
-            } else {
+                        } else {
                             // Show column
                             datatable.columns.show(columnIndex)
                             button.textContent = `${button.dataset.heading} (Show)`
                             button.dataset.visible = "true"
                             button.classList.add("active")
-            }
+                        }
                     })
 
-        controlsContainer.appendChild(button)
-    })
-}
+                    controlsContainer.appendChild(button)
+                })
+            }
 
             // Setup column reordering controls
             function setupReorderControls() {
                 const originalHeadings = datatable.data.headings.map(heading => heading.data)
 
-    // Swap first and last columns
-    const swapFirstLastListener = () => {
+                // Swap first and last columns
+                const swapFirstLastListener = () => {
                     if (!isDatatableReady) {
                         alert("Datatable not ready yet. Please wait for initialization.")
-            return
-        }
+                        return
+                    }
 
                     const lastIndex = datatable.data.headings.length - 1
 
-        if (lastIndex > 0) {
-
+                    if (lastIndex > 0) {
                         datatable.columns.swap([0, lastIndex])
-            datatable.refresh() // Force refresh to apply changes
+                        datatable.refresh() // Force refresh to apply changes
 
-            setupColumnControls() // Update controls to reflect new order
-        }
+                        setupColumnControls() // Update controls to reflect new order
+                    }
                 }
 
-    reorderEventListeners.push({
+                reorderEventListeners.push({
                     element: document.getElementById("swap-first-last"),
                     type: "click",
                     listener: swapFirstLastListener
                 })
 
-
-    // Move email column to first position
-    const moveEmailFirstListener = () => {
+                // Move email column to first position
+                const moveEmailFirstListener = () => {
                     if (!isDatatableReady) {
                         alert("Datatable not ready yet. Please wait for initialization.")
-            return
-        }
+                        return
+                    }
 
                     const headings = datatable.data.headings.map(heading => heading.data)
-        const emailIndex = headings.findIndex(heading => heading.toLowerCase().includes("email"))
+                    const emailIndex = headings.findIndex(heading => heading.toLowerCase().includes("email"))
 
-        if (emailIndex >= 0) {
+                    if (emailIndex >= 0) {
                         // Create new order with email first, then others
                         const newOrder = [emailIndex]
-            for (let i = 0; i < headings.length; i++) {
+                        for (let i = 0; i < headings.length; i++) {
                             if (i !== emailIndex) {
                                 newOrder.push(i)
                             }
                         }
                         datatable.columns.order(newOrder)
-            datatable.refresh() // Force refresh to apply changes
-            setupColumnControls()
-        } else {
+                        datatable.refresh() // Force refresh to apply changes
+                        setupColumnControls()
+                    } else {
                         alert("No email column found to move to first position.")
-        }
+                    }
                 }
-    //document.getElementById('move-email-first').addEventListener('click', moveEmailFirstListener);
-    reorderEventListeners.push({
+                //document.getElementById('move-email-first').addEventListener('click', moveEmailFirstListener);
+                reorderEventListeners.push({
                     element: document.getElementById("move-email-first"),
                     type: "click",
                     listener: moveEmailFirstListener
                 })
 
-    // Reset to original order
-    const resetOrderListener = () => {
+                // Reset to original order
+                const resetOrderListener = () => {
                     if (!isDatatableReady) {
                         alert("Datatable not ready yet. Please wait for initialization.")
-            return
-        }
+                        return
+                    }
 
                     const currentHeadings = datatable.data.headings.map(heading => heading.data)
-        const originalOrder = originalHeadings.map(heading => currentHeadings.indexOf(heading))
+                    const originalOrder = originalHeadings.map(heading => currentHeadings.indexOf(heading))
 
-        datatable.columns.order(originalOrder)
-        datatable.refresh() // Force refresh to apply changes
+                    datatable.columns.order(originalOrder)
+                    datatable.refresh() // Force refresh to apply changes
 
-        setupColumnControls()
-    }
+                    setupColumnControls()
+                }
 
-    reorderEventListeners.push({
+                reorderEventListeners.push({
                     element: document.getElementById("reset-order"),
                     type: "click",
                     listener: resetOrderListener
                 })
 
-    reorderEventListeners.forEach(({element, type, listener}) => {
+                reorderEventListeners.forEach(({element, type, listener}) => {
                     element.addEventListener(type, listener)
-    })
-
-}
+                })
+            }
 
             // Setup data operation controls
             // Cleanup function to remove reordering event listeners
             function cleanupReorderEventListeners() {
                 reorderEventListeners.forEach(({element, type, listener}) => {
                     element.removeEventListener(type, listener)
-    })
-    reorderEventListeners = []
-}
+                })
+                reorderEventListeners = []
+            }
 
             function setupDataControls() {
                 // Refresh data button
@@ -454,70 +459,76 @@ async function loadData() {
                     //     datatable.destroy();
                     // }
                     await initializeDataTable()
-        // Re-attach reordering controls after refresh
-        //setupReorderControls();
-    })
+                    // Re-attach reordering controls after refresh
+                    //setupReorderControls();
+                })
 
-    // Add remote column button
-    document.getElementById("add-column").addEventListener("click", async () => {
+                // Add remote column button
+                document.getElementById("add-column").addEventListener("click", async () => {
                     if (!isDatatableReady) {
                         alert("Datatable not ready yet. Please wait for initialization.")
-            return
-        }
+                        return
+                    }
 
                     try {
                         // Simulate fetching additional column data from server
                         // In a real application, this would be an actual server API call:
                         // const response = await fetch("/api/additional-column");
                         const response = await fetch("additional-column.json")
-            const columnData = await response.json()
+                        const columnData = await response.json()
 
-            // Convert render function string to actual function
-            if (columnData.render && typeof columnData.render === "string") {
-                            columnData.render = new Function("value", "td", "rowIndex", "cellIndex", `return ${columnData.render}`)
-            }
+                        // Convert render function string to actual function
+                        if (columnData.render && typeof columnData.render === "string") {
+                            columnData.render = new Function(
+                                "value",
+                                "td",
+                                "rowIndex",
+                                "cellIndex",
+                                `return ${columnData.render}`
+                            )
+                        }
 
                         datatable.columns.add(columnData)
-            datatable.refresh() // Force refresh to apply changes
-            setupColumnControls() // Refresh controls to include new column
-        } catch (error) {
+                        datatable.refresh() // Force refresh to apply changes
+                        setupColumnControls() // Refresh controls to include new column
+                    } catch (error) {
                         console.error("Error adding remote column:", error)
-        }
+                    }
                 })
-}
+            }
 
             // Setup search controls
             function setupSearchControls() {
                 const searchInput = document.getElementById("server-search")
-    const searchBtn = document.getElementById("search-btn")
-    const clearBtn = document.getElementById("clear-search")
+                const searchBtn = document.getElementById("search-btn")
+                const clearBtn = document.getElementById("clear-search")
 
-    // Search button click
-    searchBtn.addEventListener("click", async () => {
+                // Search button click
+                searchBtn.addEventListener("click", async () => {
                     const searchTerm = searchInput.value.trim()
-        if (searchTerm) {
+                    if (searchTerm) {
                         searchBtn.disabled = true
-            searchBtn.textContent = "Searching..."
-            try {
+                        searchBtn.textContent = "Searching..."
+                        try {
                             filteredData = await performServerSearch(searchTerm)
                             updateDataTable(filteredData)
-            } catch (error) {
+                        } catch (error) {
                             console.error("Search failed:", error)
                             alert("Search failed. Please try again.")
-            } finally {
+                        } finally {
                             searchBtn.disabled = false
                             searchBtn.textContent = "Search"
-            }
+                        }
                     } else {
                         alert("Please enter a search term")
-        }
+                    }
                 })
 
-    // Enter key in search input
-    searchInput.addEventListener("keypress", async e => {
+                // Enter key in search input
+                searchInput.addEventListener("keypress", async e => {
                     if (e.key === "Enter") {
                         const searchTerm = searchInput.value.trim()
-            if (searchTerm) {
+                        if (searchTerm) {
                             searchBtn.disabled = true
                             searchBtn.textContent = "Searching..."
                             try {
@@ -532,25 +543,25 @@ async function loadData() {
                             }
                         } else {
                             alert("Please enter a search term")
-            }
+                        }
                     }
                 })
 
-    // Clear search button
-    clearBtn.addEventListener("click", () => {
+                // Clear search button
+                clearBtn.addEventListener("click", () => {
                     searchInput.value = ""
-        currentSearchTerm = ""
-        filteredData = currentData
-        updateDataTable(filteredData)
-    })
-}
+                    currentSearchTerm = ""
+                    filteredData = currentData
+                    updateDataTable(filteredData)
+                })
+            }
 
             // Initialize everything when page loads
             document.addEventListener("DOMContentLoaded", async () => {
                 await initializeDataTable()
-    setupDataControls()
-    setupSearchControls()
-})
+                setupDataControls()
+                setupSearchControls()
+            })
         </script>
     </body>
 </html>

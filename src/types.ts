@@ -2,7 +2,7 @@
 
 interface elementNodeType {
     nodeName: string
-    attributes?: { [key: string]: string }
+    attributes?: {[key: string]: string}
     childNodes?: nodeType[]
     checked?: boolean
     value?: string | number
@@ -17,83 +17,87 @@ interface textNodeType {
 
 type nodeType = elementNodeType | textNodeType
 
-
 // Definitions for table cells and other table relevant data
 
-type cellDataType = string | number | boolean | nodeType | object;
+type cellDataType = string | number | boolean | nodeType | object
 
 interface cellType {
-    data: cellDataType;
-    text?: string;
-    order?: string | number;
-    attributes?: { [key: string]: string };
+    data: cellDataType
+    text?: string
+    order?: string | number
+    attributes?: {[key: string]: string}
 }
 
-type inputCellType = cellType | string | number | boolean;
+type inputCellType = cellType | string | number | boolean
 
 interface inputRowType {
-    attributes?: { [key: string]: string };
-    cells: inputCellType[];
+    attributes?: {[key: string]: string}
+    cells: inputCellType[]
 }
 
 interface headerCellType {
-    data: cellDataType;
-    type?: ("html" | "string");
-    text?: string;
-    attributes?: { [key: string]: string };
+    data: cellDataType
+    type?: "html" | "string"
+    text?: string
+    attributes?: {[key: string]: string}
 }
 
-type inputHeaderCellType = headerCellType | string | number | boolean;
+type inputHeaderCellType = headerCellType | string | number | boolean
 
 interface dataRowType {
-    attributes?: { [key: string]: string };
-    cells: cellType[];
+    attributes?: {[key: string]: string}
+    cells: cellType[]
 }
 
 interface DataOption {
-    headings?: string[];
-    data?: (inputRowType | inputCellType[])[];
+    headings?: string[]
+    data?: (inputRowType | inputCellType[])[]
 }
 
 interface TableDataType {
-    headings: headerCellType[];
-    data: dataRowType[];
+    headings: headerCellType[]
+    data: dataRowType[]
 }
 
-type renderType = ((cellData: (string | number | boolean | object | elementNodeType[]), td: object, rowIndex: number, cellIndex: number) => elementNodeType | string | void);
+type renderType = (
+    cellData: string | number | boolean | object | elementNodeType[],
+    td: object,
+    rowIndex: number,
+    cellIndex: number
+) => elementNodeType | string | void
 
 interface rowType {
-    row: dataRowType;
-    index: number;
+    row: dataRowType
+    index: number
 }
 
-export type DeepPartial<T> = T extends Function ? T : (T extends object ? { [P in keyof T]?: DeepPartial<T[P]>; } : T);
+export type DeepPartial<T> = T extends Function ? T : T extends object ? {[P in keyof T]?: DeepPartial<T[P]>} : T
 // Source https://gist.github.com/navix/6c25c15e0a2d3cd0e5bce999e0086fc9
 
-interface ColumnOption{
+interface ColumnOption {
     /**An integer or array of integers representing the column(s) to be manipulated. */
-    select : number | number[];
+    select: number | number[]
 
     /**Automatically sort the selected column. Can only be applied if a single column is selected. */
-    sort? : "asc" | "desc";
+    sort?: "asc" | "desc"
 
     /**When set to false the column(s) cannot be sorted. */
-    sortable? : boolean;
+    sortable?: boolean
 
     /** An array of "asc" and "desc" describing the order sort will be executed as the user clicks on the column header. Note that each can only be mentioned up to one time. */
-    sortSequence?: ("asc" | "desc")[],
+    sortSequence?: ("asc" | "desc")[]
 
     /** Default: true (boolean). Influences how string sorting is done. If true multiple numbers will be seen as just one so that "file 1.jpg" will come before "file 100.jpg". */
-    numeric?: boolean,
+    numeric?: boolean
 
     /**
      * Default: "false" Options: ["false", "upper", "lower"]. Influences how string sorting is done and whether upper or lower case letters are sorted first.
      * If "false" is selected, will use the chosen locale’s default sorting order.
      */
-    caseFirst?: "false" | "upper" | "lower",
+    caseFirst?: "false" | "upper" | "lower"
 
     /**When set to true the column(s) will not be visible and will be excluded from search results. */
-    hidden?:boolean;
+    hidden?: boolean
 
     /**
      * A string representing the type of data in the column(s) cells. Choose from the following options:
@@ -102,84 +106,86 @@ interface ColumnOption{
     number - any string with currency symbols, . or , thousand separators, %, etc
     date - a valid datetime string
      */
-    type?:string;
+    type?: string
 
     /**A string representing the datetime format when using the date type. */
-    format?:string;
+    format?: string
 
     /**
      * A callback to customise the rendering of the column(s) cell content. The function takes 3 parameters and should return the formatted cell content.
      *
      */
-    render?:renderType;
+    render?: renderType
 
     /**
      * A filter to be used instead of sorting for the selected column(s).
      */
-    filter?: (string | number | boolean | ((arg: (string | number | boolean)) => boolean))[];
+    filter?: (string | number | boolean | ((arg: string | number | boolean) => boolean))[]
 
     /** CSS classes to apply to the header cell. */
-    headerClass?: string;
+    headerClass?: string
 
     /** CSS classes to apply to the body cell. */
-    cellClass?: string;
+    cellClass?: string
 
     /**
      * Default: "base". Options: ["base", "accent", "case", "variant"].
      * Influences how searching is done. "base" and "accent" will ignore case differences. "base" and "case" will ignore differences in accent symbols
      * */
-    sensitivity?: string,
+    sensitivity?: string
 
     /** Default: true (boolean). Influences how sorting and searching is done. */
-    ignorePunctuation?: boolean;
+    ignorePunctuation?: boolean
 
     /** Default: " ". Influences searching. When performing search, the cell content is split up using this separator.*/
     searchItemSeparator?: string
 
     /** Default: false. Influences searching. Overrides default search method. */
-    searchMethod?: false | ((query: string[], cell: cellType, row: dataRowType, columnIndex: number, source: string) => boolean);
+    searchMethod?:
+        | false
+        | ((query: string[], cell: cellType, row: dataRowType, columnIndex: number, source: string) => boolean)
 
     /**
      * Default: "en-US" (string). Set a locale such as en-UK or de for the column.
      * Influences how string sorting is done. Allows even for specification of specific subvariants such as de-DE-u-co-phonebk.
      */
-    locale?: string,
+    locale?: string
 }
 
 interface LabelsConfiguration {
-    placeholder: string;
+    placeholder: string
     /**
      * default: 'Search...'
      * Sets the placeholder of the search input.
      */
-    searchTitle: string;
+    searchTitle: string
     /**
      * default: 'Search within table'
      * Sets the title of the search input.
      */
-    perPage: string;
+    perPage: string
     /**
      * default: 'entries per page'
      * Sets the per-page dropdown's label
      */
-    pageTitle: string;
+    pageTitle: string
     /**
      * default: 'Page {page}'
      * Displays current range as used in aria-labeel
      *
      * {page} - The current page number
      */
-    noRows: string;
+    noRows: string
     /**
      * default: 'No entries found'
      * The message displayed when there are no search results
      */
-    noResults: string;
+    noResults: string
     /**
      * default: 'No results match your search query'
      * The message displayed when there are no search results
      */
-    info: string;
+    info: string
     /**
      * default: 'Showing {start} to {end} of {rows} entries'
      * Displays current range, page number, etc
@@ -193,43 +199,45 @@ interface LabelsConfiguration {
 }
 
 interface ClassConfiguration {
-    active: string;
-    ascending: string;
-    bottom: string;
-    container: string;
-    cursor: string;
-    descending: string;
-    disabled: string;
-    dropdown: string;
-    ellipsis: string;
-    empty: string;
-    filter: string;
-    filterActive: string;
-    headercontainer: string;
-    hidden: string;
-    info: string;
-    input: string;
-    loading: string;
-    pagination: string;
-    paginationList: string;
-    paginationListItem: string;
-    paginationListItemLink: string;
-    search: string;
-    selector: string;
-    sorter: string;
-    table: string;
-    top: string;
-    wrapper: string;
+    active: string
+    ascending: string
+    bottom: string
+    container: string
+    cursor: string
+    descending: string
+    disabled: string
+    dropdown: string
+    ellipsis: string
+    empty: string
+    filter: string
+    filterActive: string
+    headercontainer: string
+    hidden: string
+    info: string
+    input: string
+    loading: string
+    pagination: string
+    paginationList: string
+    paginationListItem: string
+    paginationListItemLink: string
+    search: string
+    selector: string
+    sorter: string
+    table: string
+    top: string
+    wrapper: string
 }
 
-type pagerRenderType = ((data: [onFirstPage: boolean, onLastPage: boolean, currentPage: number, totalPages: number], pager: elementNodeType) => elementNodeType | void);
+type pagerRenderType = (
+    data: [onFirstPage: boolean, onLastPage: boolean, currentPage: number, totalPages: number],
+    pager: elementNodeType
+) => elementNodeType | void
 
-type rowRenderType = ((row: dataRowType, tr: elementNodeType, index: number) => elementNodeType | void);
+type rowRenderType = (row: dataRowType, tr: elementNodeType, index: number) => elementNodeType | void
 
 type renderTypeEnum = "main" | "print" | "header" | "message"
 
-type tableRenderType = ((data: object, table: elementNodeType, type: renderTypeEnum) => elementNodeType | void);
-
+type tableRenderType = (data: object, table: elementNodeType, type: renderTypeEnum) => elementNodeType | void
 
 interface DataTableConfiguration {
     /**
@@ -238,14 +246,14 @@ interface DataTableConfiguration {
      *
      * Docs: https://fiduswriter.github.io/simple-datatables/documentation/caption
      */
-    caption: string | undefined;
-    classes: ClassConfiguration;
-    columns: ColumnOption[];
+    caption: string | undefined
+    classes: ClassConfiguration
+    columns: ColumnOption[]
     /**Controls various aspects of individual or groups of columns. Should be an array of objects with the following properties:
      *
      * Docs :https://fiduswriter.github.io/simple-datatables/documentation/columns
      */
-    data: DataOption;
+    data: DataOption
     /**
      * Pass an object of data to populate the table.
      *
@@ -253,62 +261,62 @@ interface DataTableConfiguration {
      *
      * Docs : https://fiduswriter.github.io/simple-datatable/documentation/data
      */
-    type: ("date" | "html" | "number" | "boolean" | "string" | "other");
+    type: "date" | "html" | "number" | "boolean" | "string" | "other"
     /**
      * Default data type.
      * 'html' by default.
      */
-    format: string;
+    format: string
     /**
      * Default date format.
      * 'YYYY-MM-DD' by default.
      */
-    destroyable: boolean;
+    destroyable: boolean
     /**
      * Default: true
      * Whether enough information should be retained to be able to recreate the initial dom state before the table was initiated.
      */
-    ellipsisText: string;
+    ellipsisText: string
     /**
      * Default: '…'
      * Text to be used for ellipsis.
      */
-    firstLast: boolean;
+    firstLast: boolean
     /**Toggle the skip to first page and skip to last page buttons.
      * Default: false
      */
-    firstText: string;
+    firstText: string
     /**
      * default: '«'
      * Set the content of the skip to first page button.
      *
      */
-    fixedColumns: boolean;
+    fixedColumns: boolean
     /**
      * Default: true
      * Fix the width of the columns. This stops the columns changing width when loading a new page.
      */
-    fixedHeight: boolean;
+    fixedHeight: boolean
     /**
      * Default: false
      * Fix the height of the table. This is useful if your last page contains less rows than set in the perPage options and simply stops the table from changing size and affecting the layout of the page.
      */
-    footer: boolean;
+    footer: boolean
     /**
      * Default: false
      * Enable or disable the table footer.
      */
-    header: boolean;
+    header: boolean
     /**
      * Default: true
      * Enable or disable the table header.
      */
-    hiddenHeader: boolean;
+    hiddenHeader: boolean
     /**
      * Default: false
      * Whether to hide the table header.
      */
-    labels: LabelsConfiguration;
+    labels: LabelsConfiguration
     /**
      * Customise the displayed labels.
      *
@@ -325,48 +333,48 @@ interface DataTableConfiguration {
      *
      * Docs: https://fiduswriter.github.io/simple-datatables/documentation/labels
      */
-    template: (DataTableConfiguration, HTMLTableElement) => string;
+    template: (DataTableConfiguration, HTMLTableElement) => string
     /**
      * Allows for custom arranging of the DOM elements in the top and bottom containers. There are for 4 variables you can utilize:
      *
      * Docs: https://fiduswriter.github.io/simple-datatables/documentation/layout
      */
-    lastText: string;
+    lastText: string
     /**
      * default: '»'
      * Set the content of the skip to last page button.
      */
-    nextPrev: boolean;
+    nextPrev: boolean
     /**
      * Default : true
      * Toggle the next and previous pagination buttons.
      */
-    nextText: string;
+    nextText: string
     /**
      * default: '›'
      * Set the content on the next button.
      */
-    pagerDelta: number;
+    pagerDelta: number
     /**
      * Default: 2
      * Delta to use with pager
      */
-    pagerRender: false | pagerRenderType;
-     /**
+    pagerRender: false | pagerRenderType
+    /**
      * Default: false
      * Method to call to modify pager rendering output.
      */
-    paging: boolean;
+    paging: boolean
     /**
      * Default : true
      * Whether or not paging is enabled for the table
      */
-    perPage: number;
+    perPage: number
     /**
      * Default : 10
      * Sets the maximum number of rows to display on each page.
      */
-    perPageSelect: (number | [string, number])[] | false;
+    perPageSelect: (number | [string, number])[] | false
     /**
      * Default: [5, 10, 15, 20, 25]
      *
@@ -374,27 +382,27 @@ interface DataTableConfiguration {
      *
      *   Setting this to false will hide the dropdown.
      */
-    prevText: string;
+    prevText: string
     /**
      * default: '‹'
      * Set the content on the previous button.
      */
-    rowNavigation: boolean;
+    rowNavigation: boolean
     /**
      * Default: true
      * Whether to allow row based navigation
      */
-    rowSelectionKeys: string[];
+    rowSelectionKeys: string[]
     /**
      * Default: ["Enter", " "]
      * Keys that are monitored for row selection
      */
-    rowRender: false | rowRenderType;
+    rowRender: false | rowRenderType
     /**
      * Default: false
      * Method to call to modify row rendering output.
      */
-    scrollY: string;
+    scrollY: string
     /**
      * Default : ""
      *
@@ -403,13 +411,15 @@ interface DataTableConfiguration {
      * The value given here can be given in any CSS unit.
      */
     // for searching
-    searchable: boolean;
-    sensitivity: string,
-    ignorePunctuation: boolean;
-    searchItemSeparator: string;
-    searchQuerySeparator: string;
-    searchAnd: boolean;
-    searchMethod: false | ((query: string[], cell: cellType, row: dataRowType, columnIndex: number, source: string) => boolean);
+    searchable: boolean
+    sensitivity: string
+    ignorePunctuation: boolean
+    searchItemSeparator: string
+    searchQuerySeparator: string
+    searchAnd: boolean
+    searchMethod:
+        | false
+        | ((query: string[], cell: cellType, row: dataRowType, columnIndex: number, source: string) => boolean)
     // for sorting
     /**
      * Default: true
@@ -417,83 +427,89 @@ interface DataTableConfiguration {
      *
      * This option will be forced to false if the table has no headings.
      */
-    sortable: boolean;
-    locale: string;
-    numeric: boolean;
-    caseFirst: "false" | "upper" | "lower";
+    sortable: boolean
+    locale: string
+    numeric: boolean
+    caseFirst: "false" | "upper" | "lower"
 
-    tabIndex: false | number;
+    tabIndex: false | number
     /**
      * Default: false
      * A tab index number to be assigned to the table.
      */
-    tableRender: false | tableRenderType;
+    tableRender: false | tableRenderType
     /**
      * Default: false
      * Method to call to modify table rendering output.
      */
-    diffDomOptions: object;
+    diffDomOptions: object
     /**
      * Default: { valueDiffing: false }
      * Options to parse on to diffDOM.
      */
-    truncatePager: boolean;
+    truncatePager: boolean
     /**
      * Default: true
      * Truncate the page links to prevent overflow with large datasets.
      */
-    renderNulls?: boolean;
+    renderNulls?: boolean
 }
 
 interface DataTableOptions extends DeepPartial<DataTableConfiguration> {
-    columns?: ColumnOption[];
-    data?: DataOption;
-    perPageSelect?: (number | [string, number])[] | false;
-    rowRender?: false | rowRenderType;
-    tableRender?: false | tableRenderType;
-    renderNulls?: boolean;
+    columns?: ColumnOption[]
+    data?: DataOption
+    perPageSelect?: (number | [string, number])[] | false
+    rowRender?: false | rowRenderType
+    tableRender?: false | tableRenderType
+    renderNulls?: boolean
 }
 
-
 interface columnSettingsType {
-    render?: renderType,
-    type: ("date" | "html" | "number" | "boolean" | "string" | "other"),
-    format?: string,
+    render?: renderType
+    type: "date" | "html" | "number" | "boolean" | "string" | "other"
+    format?: string
     // for sorting
-    sortable?: boolean,
-    locale?: string,
-    numeric?: boolean,
-    caseFirst?: "false" | "upper" | "lower",
+    sortable?: boolean
+    locale?: string
+    numeric?: boolean
+    caseFirst?: "false" | "upper" | "lower"
     // for searching
-    searchable?: boolean,
-    sensitivity?: string,
-    ignorePunctuation?: boolean,
-    searchItemSeparator?: string,
-    searchMethod?: false | ((query: string[], cell: cellType, row: dataRowType, columnIndex: number, source: string) => boolean),
+    searchable?: boolean
+    sensitivity?: string
+    ignorePunctuation?: boolean
+    searchItemSeparator?: string
+    searchMethod?:
+        | false
+        | ((query: string[], cell: cellType, row: dataRowType, columnIndex: number, source: string) => boolean)
     //
-    headerClass?: string,
-    cellClass?: string,
-    hidden?: boolean,
-    filter?: (string | number | boolean | ((arg: (string | number | boolean)) => boolean))[],
-    sort?: "asc" | "desc",
-    sortSequence?: ("asc" | "desc")[],
+    headerClass?: string
+    cellClass?: string
+    hidden?: boolean
+    filter?: (string | number | boolean | ((arg: string | number | boolean) => boolean))[]
+    sort?: "asc" | "desc"
+    sortSequence?: ("asc" | "desc")[]
 }
 
 interface renderOptions {
-    noPaging?: true;
-    noColumnWidths?: true;
-    unhideHeader?: true;
+    noPaging?: true
+    noColumnWidths?: true
+    unhideHeader?: true
     renderHeader?: true
 }
 
-type filterStateType = (string | number | boolean | elementNodeType[] | object | ((arg: (string | number | boolean | elementNodeType[] | object)) => boolean));
+type filterStateType =
+    | string
+    | number
+    | boolean
+    | elementNodeType[]
+    | object
+    | ((arg: string | number | boolean | elementNodeType[] | object) => boolean)
 
 interface columnsStateType {
-    sort: (false | {column: number, dir: "asc" | "desc"}),
+    sort: false | {column: number; dir: "asc" | "desc"}
     filters: (filterStateType | undefined)[]
     widths: number[]
 }
-
 
 export {
     cellDataType,

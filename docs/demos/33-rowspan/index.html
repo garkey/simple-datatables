@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
         <title>Rowspan Support - simple-datatables</title>
         <!-- DataTable Styles -->
-        <link rel="stylesheet" href="../dist/css/style.css">
+        <link rel="stylesheet" href="../dist/css/style.css" />
         <!-- Demo Styles -->
-        <link rel="stylesheet" href="../demo.css">
+        <link rel="stylesheet" href="../demo.css" />
         <style>
             .demo-section {
                 margin: 40px 0;
@@ -24,7 +24,7 @@
             .code-example {
                 background-color: #fff;
                 padding: 15px;
-                border-left: 4px solid #4CAF50;
+                border-left: 4px solid #4caf50;
                 margin: 20px 0;
                 overflow-x: auto;
             }
@@ -51,15 +51,13 @@
         <h2>Rowspan Support</h2>
 
         <p>
-            Simple-datatables supports rowspan attributes in table cells, allowing cells to span multiple rows.
-            This works for both tables loaded from HTML and data loaded from JSON/JavaScript.
+            Simple-datatables supports rowspan attributes in table cells, allowing cells to span multiple rows. This
+            works for both tables loaded from HTML and data loaded from JSON/JavaScript.
         </p>
 
         <div class="demo-section">
             <h3>Example 1: Rowspan from HTML Table</h3>
-            <p>
-                When initializing from an existing HTML table, rowspan attributes are automatically preserved.
-            </p>
+            <p>When initializing from an existing HTML table, rowspan attributes are automatically preserved.</p>
 
             <table id="html-table">
                 <thead>
@@ -110,11 +108,13 @@
         <div class="demo-section">
             <h3>Example 2: Rowspan from JSON/JavaScript Data</h3>
             <p>
-                When loading data programmatically, you can specify rowspan by including an <code>attributes</code> object in your cell data.
+                When loading data programmatically, you can specify rowspan by including an
+                <code>attributes</code> object in your cell data.
             </p>
 
             <div class="code-example">
-                <pre>const data = {
+                <pre>
+const data = {
     headings: ["Department", "Employee", "Position", "Email", "Phone"],
     data: [
         {
@@ -136,11 +136,13 @@
             "555-5678"
         ]
     ]
-};</pre>
+};</pre
+                >
             </div>
 
             <div class="note">
-                <strong>Note:</strong> When using rowspan, subsequent rows should have fewer cells in the input data. The rowspan cell automatically fills those positions.
+                <strong>Note:</strong> When using rowspan, subsequent rows should have fewer cells in the input data.
+                The rowspan cell automatically fills those positions.
             </div>
 
             <table id="json-table"></table>
@@ -148,18 +150,14 @@
 
         <div class="demo-section">
             <h3>Example 3: Advanced Rowspan Usage</h3>
-            <p>
-                This example demonstrates more complex rowspan scenarios, including nested groupings.
-            </p>
+            <p>This example demonstrates more complex rowspan scenarios, including nested groupings.</p>
 
             <table id="advanced-table"></table>
         </div>
 
         <div class="demo-section">
             <h3>Example 4: Combined Colspan and Rowspan</h3>
-            <p>
-                Cells can have both colspan and rowspan attributes simultaneously.
-            </p>
+            <p>Cells can have both colspan and rowspan attributes simultaneously.</p>
 
             <table id="combined-table"></table>
         </div>
@@ -192,12 +190,7 @@
                             "555-1234"
                         ]
                     },
-                    [
-                        "Jane Smith",
-                        "Developer",
-                        "jane@example.com",
-                        "555-5678"
-                    ],
+                    ["Jane Smith", "Developer", "jane@example.com", "555-5678"],
                     {
                         cells: [
                             {
@@ -212,18 +205,8 @@
                             "555-9012"
                         ]
                     },
-                    [
-                        "Alice Brown",
-                        "Content Writer",
-                        "alice@example.com",
-                        "555-3456"
-                    ],
-                    [
-                        "Charlie Davis",
-                        "Social Media Manager",
-                        "charlie@example.com",
-                        "555-7890"
-                    ]
+                    ["Alice Brown", "Content Writer", "alice@example.com", "555-3456"],
+                    ["Charlie Davis", "Social Media Manager", "charlie@example.com", "555-7890"]
                 ]
             }
 
@@ -253,11 +236,7 @@
                             "783.8"
                         ]
                     },
-                    [
-                        "Los Angeles",
-                        "3,979,576",
-                        "1,302.15"
-                    ],
+                    ["Los Angeles", "3,979,576", "1,302.15"],
                     {
                         cells: [
                             {
@@ -269,11 +248,7 @@
                             "630.2"
                         ]
                     },
-                    [
-                        "Montreal",
-                        "1,704,694",
-                        "431.5"
-                    ],
+                    ["Montreal", "1,704,694", "431.5"],
                     {
                         cells: [
                             {
@@ -289,17 +264,8 @@
                             "1,572"
                         ]
                     },
-                    [
-                        "Manchester",
-                        "547,627",
-                        "115.6"
-                    ],
-                    [
-                        "France",
-                        "Paris",
-                        "2,165,423",
-                        "105.4"
-                    ]
+                    ["Manchester", "547,627", "115.6"],
+                    ["France", "Paris", "2,165,423", "105.4"]
                 ]
             }
 
@@ -330,12 +296,7 @@
                             "Initial planning phase"
                         ]
                     },
-                    [
-                        "Design",
-                        "In Progress",
-                        "12",
-                        "UI/UX design work"
-                    ],
+                    ["Design", "In Progress", "12", "UI/UX design work"],
                     [
                         "Week 2",
                         {
@@ -361,13 +322,7 @@
                             "Bug fixes needed"
                         ]
                     },
-                    [
-                        "Project Delta",
-                        "Review",
-                        "Complete",
-                        "4",
-                        "Code review completed"
-                    ],
+                    ["Project Delta", "Review", "Complete", "4", "Code review completed"],
                     [
                         {
                             data: "Multiple Projects - Documentation",

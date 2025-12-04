@@ -1,16 +1,14 @@
 interface ColumnFilterOptions {
     classes?: {
-        button?: string,
-        menu?: string,
-        wrapper?: string,
+        button?: string
+        menu?: string
+        wrapper?: string
         container?: string
-    },
+    }
     labels?: {
         button?: string
-    },
-    hiddenColumns?: number[];
+    }
+    hiddenColumns?: number[]
 }
 
-export {
-    ColumnFilterOptions
-}
+export {ColumnFilterOptions}

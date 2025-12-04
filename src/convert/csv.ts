@@ -1,20 +1,17 @@
-import {
-    isObject
-} from "../helpers"
+import {isObject} from "../helpers"
 
 interface csvConvertUserOptions {
-  lineDelimiter?: string,
-  columnDelimiter?: string
-  removeDoubleQuotes?: boolean
-  data: string,
-  headings?: string[],
+    lineDelimiter?: string
+    columnDelimiter?: string
+    removeDoubleQuotes?: boolean
+    data: string
+    headings?: string[]
 }
-
 
 /**
  * Convert CSV data to fit the format used in the table.
  */
-export const convertCSV = function(userOptions : csvConvertUserOptions) {
+export const convertCSV = function (userOptions: csvConvertUserOptions) {
     let obj
     const defaults = {
         lineDelimiter: "\n",
@@ -39,10 +36,9 @@ export const convertCSV = function(userOptions : csvConvertUserOptions) {
         }
 
         // Split the string into rows
-        const rows : string[] = options.data.split(options.lineDelimiter)
+        const rows: string[] = options.data.split(options.lineDelimiter)
 
         if (rows.length) {
-
             if (options.headings) {
                 obj.headings = rows[0].split(options.columnDelimiter)
                 if (options.removeDoubleQuotes) {

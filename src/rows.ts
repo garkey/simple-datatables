@@ -7,7 +7,7 @@ import {cellToText, classNamesToSelector} from "./helpers"
  * Rows API
  */
 export class Rows {
-    cursor: (false | number)
+    cursor: false | number
 
     dt: DataTable
 
@@ -16,7 +16,7 @@ export class Rows {
         this.cursor = false
     }
 
-    setCursor(index: (false | number) = false) {
+    setCursor(index: false | number = false) {
         if (index === this.cursor) {
             return
         }
@@ -59,7 +59,7 @@ export class Rows {
         if (Array.isArray(select)) {
             this.dt.data.data = this.dt.data.data.filter((_row: dataRowType, index: number) => !select.includes(index))
             // We may have emptied the table
-            if ( !this.dt.data.data.length ) {
+            if (!this.dt.data.data.length) {
                 this.dt.hasRows = false
             }
             this.dt.update(true)
@@ -68,20 +68,17 @@ export class Rows {
         }
     }
 
-
     /**
      * Find index of row by searching for a value in a column
      */
     findRowIndex(columnIndex: number, value: string | boolean | number) {
         // returns row index of first case-insensitive string match
         // inside the td innerText at specific column index
-        return this.dt.data.data.findIndex(
-            (row: dataRowType) => {
-                const cell = row.cells[columnIndex]
-                const cellText = cellToText(cell)
-                return cellText.toLowerCase().includes(String(value).toLowerCase())
-            }
-        )
+        return this.dt.data.data.findIndex((row: dataRowType) => {
+            const cell = row.cells[columnIndex]
+            const cellText = cellToText(cell)
+            return cellText.toLowerCase().includes(String(value).toLowerCase())
+        })
     }
 
     /**

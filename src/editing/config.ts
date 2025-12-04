@@ -1,7 +1,7 @@
 /**
-* Default config
-* @type {Object}
-*/
+ * Default config
+ * @type {Object}
+ */
 import {Editor} from "./editor"
 
 export const defaultConfig = {

@@ -1,27 +1,19 @@
-import {
-    cellToText,
-    isObject
-} from "../helpers"
+import {cellToText, isObject} from "../helpers"
 import {DataTable} from "../datatable"
-import {
-    cellDataType,
-    cellType,
-    dataRowType,
-    headerCellType
-} from "../types"
+import {cellDataType, cellType, dataRowType, headerCellType} from "../types"
 /**
  * Export table to SQL
  */
 
- interface sqlUserOptions {
-   download?: boolean,
-   skipColumn?: number[],
-   tableName?: string,
-   selection?: number | number[],
-   filename?: string,
- }
+interface sqlUserOptions {
+    download?: boolean
+    skipColumn?: number[]
+    tableName?: string
+    selection?: number | number[]
+    filename?: string
+}
 
-export const exportSQL = function(dt: DataTable, userOptions : sqlUserOptions = {}) {
+export const exportSQL = function (dt: DataTable, userOptions: sqlUserOptions = {}) {
     if (!dt.hasHeadings && !dt.hasRows) return false
 
     const defaults = {
@@ -50,7 +42,6 @@ export const exportSQL = function(dt: DataTable, userOptions : sqlUserOptions = 
             for (let i = 0; i < options.selection.length; i++) {
                 selectedRows = selectedRows.concat(dt.pages[options.selection[i] - 1].map(row => row.row))
             }
-
         } else {
             selectedRows = dt.pages[options.selection - 1].map(row => row.row)
         }
@@ -63,7 +54,9 @@ export const exportSQL = function(dt: DataTable, userOptions : sqlUserOptions = 
         return shownCells.map((cell: cellType) => cellToText(cell))
     })
 
-    const headers = dt.data.headings.filter((_heading: headerCellType, index: number) => columnShown(index)).map((header: headerCellType) => header.text ?? String(header.data))
+    const headers = dt.data.headings
+        .filter((_heading: headerCellType, index: number) => columnShown(index))
+        .map((header: headerCellType) => header.text ?? String(header.data))
     // Only proceed if we have data
     if (rows.length) {
         // Begin INSERT statement
@@ -96,7 +89,6 @@ export const exportSQL = function(dt: DataTable, userOptions : sqlUserOptions = 
 
             // end VALUES
             str += "),"
-
         })
 
         // Remove trailing comma

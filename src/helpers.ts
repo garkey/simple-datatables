@@ -1,16 +1,10 @@
-import {
-    cellDataType,
-    cellType,
-    columnSettingsType,
-    inputCellType,
-    nodeType,
-    textNodeType
-} from "./types"
+import {cellDataType, cellType, columnSettingsType, inputCellType, nodeType, textNodeType} from "./types"
 
 /**
  * Check is item is object
  */
-export const isObject = (val: (string | number | boolean | object | null | undefined )) => Object.prototype.toString.call(val) === "[object Object]"
+export const isObject = (val: string | number | boolean | object | null | undefined) =>
+    Object.prototype.toString.call(val) === "[object Object]"
 
 /**
  * Check for valid JSON string
@@ -28,7 +22,7 @@ export const isJson = (str: string) => {
 /**
  * Create DOM element node
  */
-export const createElement = (nodeName: string, attrs?: { [key: string]: string}) => {
+export const createElement = (nodeName: string, attrs?: {[key: string]: string}) => {
     const dom = document.createElement(nodeName)
     if (attrs && "object" == typeof attrs) {
         for (const attr in attrs) {
@@ -64,30 +58,24 @@ export const cellToText = (obj: inputCellType | cellDataType | null | undefined)
     return String(obj)
 }
 
-
-export const escapeText = function(text: string) {
-    return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
+export const escapeText = function (text: string) {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 }
 
-
-export const visibleToColumnIndex = function(visibleIndex: number, columns: columnSettingsType[]) {
+export const visibleToColumnIndex = function (visibleIndex: number, columns: columnSettingsType[]) {
     let counter = 0
     let columnIndex = 0
-    while (counter < (visibleIndex+1)) {
+    while (counter < visibleIndex + 1) {
         const columnSettings = columns[columnIndex]
         if (!columnSettings.hidden) {
             counter += 1
         }
         columnIndex += 1
     }
-    return columnIndex-1
+    return columnIndex - 1
 }
 
-export const columnToVisibleIndex = function(columnIndex: number, columns: columnSettingsType[]) {
+export const columnToVisibleIndex = function (columnIndex: number, columns: columnSettingsType[]) {
     let visibleIndex = columnIndex
     let counter = 0
     while (counter < columnIndex) {
@@ -105,7 +93,7 @@ export const columnToVisibleIndex = function(columnIndex: number, columns: colum
  *
  * @param map The `NamedNodeMap` to convert
  */
-export const namedNodeMapToObject = function(map: NamedNodeMap) {
+export const namedNodeMapToObject = function (map: NamedNodeMap) {
     const obj = {}
     if (map) {
         for (const attr of map) {
@@ -127,7 +115,11 @@ export const classNamesToSelector = (classNames: string) => {
     if (!classNames) {
         return null
     }
-    return classNames.trim().split(" ").map(className => `.${className}`).join("")
+    return classNames
+        .trim()
+        .split(" ")
+        .map(className => `.${className}`)
+        .join("")
 }
 
 /**
@@ -166,7 +158,7 @@ export const joinWithSpaces = (first: string | null | undefined, second: string 
 
 // Source: https://www.freecodecamp.org/news/javascript-debounce-example/
 
-export const debounce = function(func: () => void, timeout = 300) {
+export const debounce = function (func: () => void, timeout = 300) {
     let timer: number
     return (..._args: any[]) => {
         clearTimeout(timer)

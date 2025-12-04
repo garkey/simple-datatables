@@ -1,30 +1,21 @@
-import {
-    cellToText,
-    isObject
-} from "../helpers"
+import {cellToText, isObject} from "../helpers"
 import {DataTable} from "../datatable"
-import {
-    cellDataType,
-
-    dataRowType,
-    headerCellType
-} from "../types"
+import {cellDataType, dataRowType, headerCellType} from "../types"
 
 /**
  * Export table to CSV
  */
 
 interface csvUserOptions {
-  download?: boolean,
-  skipColumn?: number[],
-  lineDelimiter?: string,
-  columnDelimiter?: string,
-  selection?: number | number[],
-  filename?: string,
+    download?: boolean
+    skipColumn?: number[]
+    lineDelimiter?: string
+    columnDelimiter?: string
+    selection?: number | number[]
+    filename?: string
 }
 
-
-export const exportCSV = function(dt: DataTable, userOptions: csvUserOptions = {}) {
+export const exportCSV = function (dt: DataTable, userOptions: csvUserOptions = {}) {
     if (!dt.hasHeadings && !dt.hasRows) return false
 
     const defaults = {
@@ -55,7 +46,7 @@ export const exportCSV = function(dt: DataTable, userOptions: csvUserOptions = {
         .flat()
 
     // Track rowspan for cells: column index -> {remainingRows, cellText}
-    const rowspanCarryover: Map<number, {remainingRows: number, cellText: string}> = new Map()
+    const rowspanCarryover: Map<number, {remainingRows: number; cellText: string}> = new Map()
 
     // Selection or whole table
     let selectedRows: dataRowType[]
@@ -67,7 +58,6 @@ export const exportCSV = function(dt: DataTable, userOptions: csvUserOptions = {
             for (let i = 0; i < options.selection.length; i++) {
                 selectedRows = selectedRows.concat(dt.pages[options.selection[i] - 1].map(row => row.row))
             }
-
         } else {
             selectedRows = dt.pages[options.selection - 1].map(row => row.row)
         }
@@ -75,75 +65,73 @@ export const exportCSV = function(dt: DataTable, userOptions: csvUserOptions = {
         selectedRows = dt.data.data
     }
 
-    let rows : cellDataType[][] = []
+    let rows: cellDataType[][] = []
     // Include headings
     rows[0] = headers
-    rows = rows.concat(selectedRows.map((row: dataRowType) => {
-        const csvRow: cellDataType[] = []
-        let csvColumnIndex = 0
-        let dataColumnIndex = 0
+    rows = rows.concat(
+        selectedRows.map((row: dataRowType) => {
+            const csvRow: cellDataType[] = []
+            let csvColumnIndex = 0
+            let dataColumnIndex = 0
 
-        while (dataColumnIndex < row.cells.length) {
-            const cell = row.cells[dataColumnIndex]
+            while (dataColumnIndex < row.cells.length) {
+                const cell = row.cells[dataColumnIndex]
 
+                if (columnShown(dataColumnIndex)) {
+                    // Check if this column is occupied by a rowspan from a previous row
+                    if (rowspanCarryover.has(csvColumnIndex)) {
+                        const carryover = rowspanCarryover.get(csvColumnIndex)
+                        // Use the carried over text
+                        csvRow.push(carryover.cellText)
 
-            if (columnShown(dataColumnIndex)) {
+                        // Decrement remaining rows
+                        carryover.remainingRows--
+                        if (carryover.remainingRows <= 0) {
+                            rowspanCarryover.delete(csvColumnIndex)
+                        }
 
-
-                // Check if this column is occupied by a rowspan from a previous row
-                if (rowspanCarryover.has(csvColumnIndex)) {
-                    const carryover = rowspanCarryover.get(csvColumnIndex)
-                    // Use the carried over text
-                    csvRow.push(carryover.cellText)
-
-                    // Decrement remaining rows
-                    carryover.remainingRows--
-                    if (carryover.remainingRows <= 0) {
-                        rowspanCarryover.delete(csvColumnIndex)
-                    }
-
-                    csvColumnIndex++
-                    dataColumnIndex++
-                } else if (cell.attributes?.["data-rowspan-placeholder"] === "true") {
-                // This is a placeholder, should have been handled by carryover
-                    dataColumnIndex++
-                } else if (cell.attributes?.["data-colspan-placeholder"] === "true") {
-                // Colspan placeholder - add empty cell
-                    csvRow.push("")
-                    csvColumnIndex++
-                    dataColumnIndex++
-                } else {
-                // Regular cell or cell with colspan/rowspan
-                    const colspan = Number(cell.attributes?.colspan || 1)
-                    const rowspan = Number(cell.attributes?.rowspan || 1)
-                    const cellText = cellToText(cell)
-
-                    // Add the cell and colspan placeholders
-                    csvRow.push(cellText)
-                    for (let i = 1; i < colspan; i++) {
+                        csvColumnIndex++
+                        dataColumnIndex++
+                    } else if (cell.attributes?.["data-rowspan-placeholder"] === "true") {
+                        // This is a placeholder, should have been handled by carryover
+                        dataColumnIndex++
+                    } else if (cell.attributes?.["data-colspan-placeholder"] === "true") {
+                        // Colspan placeholder - add empty cell
                         csvRow.push("")
-                    }
+                        csvColumnIndex++
+                        dataColumnIndex++
+                    } else {
+                        // Regular cell or cell with colspan/rowspan
+                        const colspan = Number(cell.attributes?.colspan || 1)
+                        const rowspan = Number(cell.attributes?.rowspan || 1)
+                        const cellText = cellToText(cell)
 
-                    // Track rowspan for future rows
-                    if (rowspan > 1) {
-                        rowspanCarryover.set(csvColumnIndex, {
-                            remainingRows: rowspan - 1,
-                            cellText
-                        })
-                    }
+                        // Add the cell and colspan placeholders
+                        csvRow.push(cellText)
+                        for (let i = 1; i < colspan; i++) {
+                            csvRow.push("")
+                        }
 
-                    csvColumnIndex++
+                        // Track rowspan for future rows
+                        if (rowspan > 1) {
+                            rowspanCarryover.set(csvColumnIndex, {
+                                remainingRows: rowspan - 1,
+                                cellText
+                            })
+                        }
+
+                        csvColumnIndex++
+                        dataColumnIndex++
+                    }
+                } else {
+                    // Skip hidden columns and placeholder cells
                     dataColumnIndex++
                 }
-
-            } else {
-                // Skip hidden columns and placeholder cells
-                dataColumnIndex++
             }
-        }
 
-        return csvRow
-    }))
+            return csvRow
+        })
+    )
 
     // Only proceed if we have data
     if (rows.length) {
@@ -154,7 +142,7 @@ export const exportCSV = function(dt: DataTable, userOptions: csvUserOptions = {
                     cell = cell.trim()
                     cell = cell.replace(/\s{2,}/g, " ")
                     cell = cell.replace(/\n/g, "  ")
-                    cell = cell.replace(/"/g, "\"\"")
+                    cell = cell.replace(/"/g, '""')
                     //have to manually encode "#" as encodeURI leaves it as is.
                     cell = cell.replace(/#/g, "%23")
                     if (cell.includes(",")) {

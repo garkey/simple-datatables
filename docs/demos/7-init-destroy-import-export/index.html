@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
         <title>Init/destroy and import/export - simple-datatables</title>
         <!-- DataTable Styles -->
-        <link rel="stylesheet" href="../dist/css/style.css">
+        <link rel="stylesheet" href="../dist/css/style.css" />
         <!-- Demo Styles -->
-        <link rel="stylesheet" href="../demo.css">
+        <link rel="stylesheet" href="../demo.css" />
         <style>
             .controls {
                 padding: 0 10px;
@@ -81,59 +81,35 @@
             <tbody>
                 <tr>
                     <td></td>
-                    <td>
-                        Test one <br>CCode: 33123
-                    </td>
+                    <td>Test one <br />CCode: 33123</td>
                     <td>7.1.5</td>
                     <td>26.11.2018</td>
-                    <td>
-                        Server: s1 <br>DB: db1
-                    </td>
-                    <td>
-                        Websitename: Red <br>Node: 10
-                    </td>
+                    <td>Server: s1 <br />DB: db1</td>
+                    <td>Websitename: Red <br />Node: 10</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>
-                        Test two <br>CCode: 12353
-                    </td>
+                    <td>Test two <br />CCode: 12353</td>
                     <td>7.1.5.2</td>
                     <td>26.11.2019</td>
-                    <td>
-                        Server: s1 <br>DB: db2
-                    </td>
-                    <td>
-                        Websitename: Green <br>Node: 6
-                    </td>
+                    <td>Server: s1 <br />DB: db2</td>
+                    <td>Websitename: Green <br />Node: 6</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>
-                        Test three <br>CCode: 33522
-                    </td>
+                    <td>Test three <br />CCode: 33522</td>
                     <td>7.1.6</td>
                     <td>01.01.2020</td>
-                    <td>
-                        Server: s2 <br>DB: db1
-                    </td>
-                    <td>
-                        Websitename: Orange <br>Node: 5
-                    </td>
+                    <td>Server: s2 <br />DB: db1</td>
+                    <td>Websitename: Orange <br />Node: 5</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>
-                        Test four <br>CCode: 25512
-                    </td>
+                    <td>Test four <br />CCode: 25512</td>
                     <td>7.1.7</td>
                     <td>26.03.2021</td>
-                    <td>
-                        Server: s1 <br>DB: db3
-                    </td>
-                    <td>
-                        Websitename: Blue <br>Node: 10
-                    </td>
+                    <td>Server: s1 <br />DB: db3</td>
+                    <td>Websitename: Blue <br />Node: 10</td>
                 </tr>
             </tbody>
         </table>
@@ -142,12 +118,17 @@
             <strong>Column Visibility</strong>
             <div class="form-group" id="columns"></div>
 
-            <br>
+            <br />
 
             <strong>Import / Export Data</strong>
             <div class="card-block">
                 <div class="form-group">
-                    <textarea name="" id="" cols="30" rows="2" placeholder="Paste your CSV or JSON string here..."></textarea>
+                    <textarea
+                        name=""
+                        id=""
+                        cols="30"
+                        rows="2"
+                        placeholder="Paste your CSV or JSON string here..."></textarea>
                 </div>
                 <div class="form-group">
                     <button type="button" class="primary import" data-type="csv">Import CSV</button>
@@ -158,8 +139,8 @@
                 </div>
                 <div class="form-group">
                     <small>
-                        Note: The csv column delimiters and line delimiters are set to <code>","</code>
-                        and <code>"\n"</code> respectively.
+                        Note: The csv column delimiters and line delimiters are set to <code>","</code> and
+                        <code>"\n"</code> respectively.
                     </small>
                 </div>
             </div>
@@ -200,11 +181,11 @@
                 ]
             })
             window.datatable = datatable
-            const updateColumns = function() {
+            const updateColumns = function () {
                 datatable.columns.show(visible)
                 datatable.columns.hide(hidden)
             }
-            const setCheckboxes = function() {
+            const setCheckboxes = function () {
                 inputs = []
                 while (visible.length) {
                     visible.pop()
@@ -241,7 +222,7 @@
                     inputs.push(input)
                 })
                 inputs.forEach(input => {
-                    input.onchange = function(_event) {
+                    input.onchange = function (_event) {
                         if (input.checked) {
                             hidden.splice(hidden.indexOf(input.idx), 1)
                             visible.push(input.idx)
@@ -258,7 +239,7 @@
                 setCheckboxes()
             })
             window.dt = datatable
-            textarea.addEventListener("input", function(_event) {
+            textarea.addEventListener("input", function (_event) {
                 if (this.value.length) {
                     this.parentNode.classList.remove("error")
                 }
@@ -272,14 +253,13 @@
                     if (type === "csv") {
                         data.columnDelimiter = ","
                     }
-                    if (type==="csv") {
+                    if (type === "csv") {
                         exportCSV(datatable, data)
-                    } else if (type==="json") {
+                    } else if (type === "json") {
                         exportJSON(datatable, data)
-                    } else if (type==="sql") {
+                    } else if (type === "sql") {
                         exportSQL(datatable, data)
                     }
-
                 })
             })
             document.querySelectorAll(".main").forEach(el => {
@@ -309,7 +289,6 @@
                         const convertedData = convertJSON(data)
                         datatable.insert(convertedData)
                     }
-
                 })
             })
         </script>

@@ -238,7 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     <pre>Data rows: ${dt.data.data.length}</pre>
                     <pre>First row cells: ${dt.data.data[0].cells.length}</pre>
         </details>`
-
     } catch (error) {
                 results.innerHTML = `<p class="error">Error initializing DataTable: ${error.message}</p>`
         console.error("Test error:", error)

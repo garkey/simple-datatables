@@ -1,14 +1,11 @@
 import {DataTable} from "../datatable"
 import {classNamesToSelector, createElement} from "../helpers"
 
-import {
-    defaultConfig
-} from "./config"
+import {defaultConfig} from "./config"
 
 import {ColumnFilterOptions} from "./types"
 
 class ColumnFilter {
-
     addedButtonDOM: boolean
 
     menuOpen: boolean
@@ -17,7 +14,7 @@ class ColumnFilter {
 
     dt: DataTable
 
-    events: { [key: string]: () => void}
+    events: {[key: string]: () => void}
 
     initialized: boolean
 
@@ -29,9 +26,9 @@ class ColumnFilter {
 
     wrapperDOM: HTMLElement
 
-    limits: {x: number, y: number}
+    limits: {x: number; y: number}
 
-    rect: {width: number, height: number}
+    rect: {width: number; height: number}
 
     event: Event
 
@@ -44,21 +41,17 @@ class ColumnFilter {
     }
 
     init() {
-
         if (this.initialized) {
             return
         }
 
         const buttonSelector = classNamesToSelector(this.options.classes.button)
-        let buttonDOM : (HTMLElement | null) = this.dt.wrapperDOM.querySelector(buttonSelector)
+        let buttonDOM: HTMLElement | null = this.dt.wrapperDOM.querySelector(buttonSelector)
         if (!buttonDOM) {
-            buttonDOM = createElement(
-                "button",
-                {
-                    class: this.options.classes.button,
-                    html: "▦"
-                }
-            )
+            buttonDOM = createElement("button", {
+                class: this.options.classes.button,
+                html: "▦"
+            })
             // filter button not part of template (could be default template. We add it to search.)
             const searchSelector = classNamesToSelector(this.dt.options.classes.search)
             const searchWrapper = this.dt.wrapperDOM.querySelector(searchSelector)
@@ -71,7 +64,6 @@ class ColumnFilter {
         }
         this.buttonDOM = buttonDOM
 
-
         this.containerDOM = createElement("div", {
             id: this.options.classes.container
         })
@@ -80,8 +72,8 @@ class ColumnFilter {
         })
         this.menuDOM = createElement("ul", {
             class: this.options.classes.menu,
-            html: this.dt.data.headings.map(
-                (heading, index) => {
+            html: this.dt.data.headings
+                .map((heading, index) => {
                     const settings = this.dt.columns.settings[index]
                     if (this.options.hiddenColumns.includes(index)) {
                         return ""
@@ -92,8 +84,8 @@ class ColumnFilter {
                             ${heading.text || heading.data}
                         </label>
                     </li>`
-                }
-            ).join("")
+                })
+                .join("")
         })
         this.wrapperDOM.appendChild(this.menuDOM)
         this.containerDOM.appendChild(this.wrapperDOM)
@@ -102,7 +94,6 @@ class ColumnFilter {
         this._bind()
 
         this.initialized = true
-
     }
 
     dismiss() {
@@ -191,11 +182,9 @@ class ColumnFilter {
             this._closeMenu()
         }
     }
-
 }
 
-
-export const addColumnFilter = function(dataTable: DataTable, options = {}) {
+export const addColumnFilter = function (dataTable: DataTable, options = {}) {
     const columnFilter = new ColumnFilter(dataTable, options)
     if (dataTable.initialized) {
         columnFilter.init()
